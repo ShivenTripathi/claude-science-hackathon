@@ -1,0 +1,11 @@
+{
+  "gene": "SSR1",
+  "verdict": "likely_artifact",
+  "hypothesis": "Loss of SSR1 impairs ER translocation/secretion of the heavily secreted Th2 cytokines and could collapse the autocrine IL-4\u2192STAT6\u2192GATA3 positive-feedback loop, indirectly lowering the Th2 mRNA program more than the less autocrine-dependent Th1 program.",
+  "investigator_verdict": "likely_artifact",
+  "confidence": "medium",
+  "citations_check": "partially_supported",
+  "likely_artifact": true,
+  "druggable": false,
+  "class": "other"
+}

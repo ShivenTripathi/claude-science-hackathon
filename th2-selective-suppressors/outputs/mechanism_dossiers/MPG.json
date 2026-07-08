@@ -1,0 +1,11 @@
+{
+  "gene": "MPG",
+  "verdict": "unlikely",
+  "hypothesis": "Loss of MPG (AAG) may selectively blunt the Th2 program by disrupting base-excision-repair/5hmC-reader activity at the demethylation-dependent IL4/IL5/IL13 Th2 cytokine locus, rather than by driving Th1.",
+  "investigator_verdict": "uncertain",
+  "confidence": "low",
+  "citations_check": "supported",
+  "likely_artifact": false,
+  "druggable": false,
+  "class": "other"
+}

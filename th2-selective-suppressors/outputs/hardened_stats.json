@@ -1,0 +1,19 @@
+{
+  "old_corr": 0.541,
+  "new_corr": 0.179,
+  "sel_2arm": 420,
+  "sel_multi": 41,
+  "sel_hardened": 7,
+  "fdr_2arm": 1.252,
+  "fdr_multi": 5.506,
+  "hardened_genes": [
+    "BRPF1",
+    "DALRD3",
+    "GLIS2",
+    "RABEPK",
+    "RELL2",
+    "SLC30A5",
+    "UQCR11"
+  ],
+  "survivors_from_old": []
+}

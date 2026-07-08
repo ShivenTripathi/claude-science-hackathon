@@ -1,0 +1,44 @@
+[
+  {
+    "key": "foundational_biology",
+    "title": "Foundational immunology",
+    "verdict": "well_supported",
+    "top_concern": "'Master regulators = GATA3 + STAT6' slightly conflates two roles: GATA3 is the lineage-defining transcription factor, whereas STAT6 is the upstream signal transducer of the IL-4 cue. GATA3 can drive Th2 commitment STAT6-independently via autoactivation (Stat6-deficient cells reconstituted by GATA3), so they are not interchangeable co-master TFs.",
+    "top_correction": "Frame STAT6 as the upstream IL-4 signal transducer feeding GATA3, not as a co-equal 'master regulator' transcription factor with GATA3."
+  },
+  {
+    "key": "known_regulator_directions",
+    "title": "Known-regulator direction reframe",
+    "verdict": "mostly_supported",
+    "top_concern": "The clean 'activator vs repressor' dichotomy oversimplifies the NuRD biology. CHD4 is explicitly BIMODAL (Hosokawa et al., PNAS 2013): the Gata3/Chd4/p300 complex ACTIVATES Th2 cytokines (IL-4/IL-5/IL-13) while the Gata3/Chd4-NuRD complex REPRESSES Tbx21. Chd4 knockdown decreases IL-4+ cells (18.3%->7.9%) AND increases IFN-g+ cells (3.7%->13.8%). So CHD4 KD suppresses Th2 too - it is not a pure Th1-repressor, and could legitimately score on the Th2-down arm.",
+    "top_correction": "TRAF3 is MISCLASSIFIED. The reframe lists TRAF3 as a negative regulator whose knockdown should induce Th1, but the direct T-cell evidence (Lu/Bishop lab, J Biol Chem 2024) shows TRAF3 ENHANCES STAT6 activation and PROMOTES Th2 skewing, and TRAF3 deficiency IMPAIRS Th2 (and Th1) differentiation. TRAF3 is therefore a POSITIVE Th2 regulator - its knockdown should LOWER Th2, behaving like the activators (GATA3/STAT6), not the repressors. The 'negative regulator' label likely derives from TRAF3's role in B-cell/alternative-NF-kB signaling, which does not transfer to the T-cell Th2 program."
+  },
+  {
+    "key": "novelty_priorart",
+    "title": "Novelty & prior art",
+    "verdict": "problematic",
+    "top_concern": "Novelty is low. The specific combination we pitched as our angle - split the Ota 2021 Th2-vs-Th1 signature into arms, score every genome-scale CRISPRi perturbation on both arms, decompose in 2D, and land on GATA3 - is a near-duplicate of the published Fig 4 / pert2state analysis in the very paper we are analyzing, using the identical discovery signature. Anyone reading their supplement + code would see this.",
+    "top_correction": "Drop or heavily soften the novelty claim. We should not present 'split the Th2-vs-Th1 signature into arms and score both' or the 2D decomposition as our idea - Zhu & Dann et al. already do exactly this with the same Ota 2021 signature (score_th2/score_th1, Supplementary Fig 17). Position our work as a re-analysis/reframing, at most contributing an explicit selective-suppression flatness criterion, not a new method."
+  },
+  {
+    "key": "lead_ARNT",
+    "title": "Lead: ARNT",
+    "verdict": "mixed",
+    "top_concern": "Context mismatch: the HIF2alpha-Th2 link is established in HYPOXIC / tissue / intestinal-helminth settings and is hypoxia- or genetic-activation-dependent. Whether the ARNT/HIF2alpha axis meaningfully drives GATA3/IL4 in a 48hr in-vitro Stim of normoxic peripheral blood CD4+ T cells (typical Perturb-seq culture at ~21% O2, no HIF stabilization) is unproven and is the main reason to down-weight the lead.",
+    "top_correction": "Frame the mechanistic hypothesis as ARNT-via-HIF2alpha (EPAS1), not ARNT-via-AhR or generic HIF1alpha - HIF2alpha is the Th2-relevant partner and gives the cleanest, direction-correct rationale. Any writeup should name EPAS1/HIF2alpha as the presumed effector."
+  },
+  {
+    "key": "lead_ELAVL1",
+    "title": "Lead: ELAVL1",
+    "verdict": "mostly_supported",
+    "top_concern": "Global-artifact risk is real and non-trivial: HuR is a pan-cellular mRNA-stability hub with hundreds of ARE targets. Full/strong HuR loss impairs core T-cell activation, proliferation, and survival, and also stabilizes Foxp3 (Treg), IL-2, and Th17 program mRNAs. Strong CRISPRi knockdown could push cells toward the 'sick-cell' global-dampening regime our own analysis flagged as the dominant confound (Th2 and Th1 arms +0.5 correlated).",
+    "top_correction": "Do not describe HuR/ELAVL1 as a Th2-specific factor; it is a global ARE-binding mRNA stabilizer that happens to have a disproportionately characterized effect on the GATA3/IL4/IL13 regulon. The lead is plausible but the mechanism is 'global regulator with a strong Th2 sub-module,' not 'selective Th2 gene.'"
+  },
+  {
+    "key": "methods_redteam",
+    "title": "Methods red-team",
+    "verdict": "mixed",
+    "top_concern": "SCORING IS SELF-CONTAINED, NOT COMPETITIVE: the arm score is an unweighted mean of per-gene DE z-scores over signature genes. This measures absolute movement of the signature, so any global transcriptional shift (sick cell) moves both arms together. The +0.5 correlation is therefore largely manufactured by the scoring choice, not a fact of nature to be regressed away afterward. Competitive/rank-based scores (AUCell, singscore, fgsea/CAMERA-style) normalize against the rest of the genome and would remove most of this confound at the scoring step.",
+    "top_correction": "Move the magnitude correction from a post-hoc regressor to the scoring step: replace the mean-of-z self-contained score with a competitive/rank-based enrichment (AUCell, singscore, or an fgsea/CAMERA/ROAST-style rotation test that normalizes against matched random gene sets). This removes most of the +0.5 confound a priori instead of trusting a noisy Th1-proxy regression."
+  }
+]

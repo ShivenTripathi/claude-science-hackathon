@@ -1,0 +1,11 @@
+{
+  "gene": "GPATCH8",
+  "verdict": "uncertain",
+  "hypothesis": "As a branchpoint splicing quality-control factor, GPATCH8 loss could selectively impair productive splicing/expression of a Th2-program transcript (e.g., GATA3 or an upstream STAT6/IL4-axis component), lowering Th2 output without engaging the T-bet/Th1 axis.",
+  "investigator_verdict": "uncertain",
+  "confidence": "low",
+  "citations_check": "supported",
+  "likely_artifact": false,
+  "druggable": false,
+  "class": "other"
+}

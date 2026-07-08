@@ -1,0 +1,11 @@
+{
+  "gene": "AHSA1",
+  "verdict": "uncertain",
+  "hypothesis": "Loss of AHSA1 (Aha1), the sole mammalian activator of HSP90 ATPase, impairs HSP90 chaperoning of the metastable Th2-defining clients STAT6 and GATA3, collapsing the GATA3/IL4/IL5/IL13 program while leaving the less chaperone-addicted T-bet/IFNG axis intact.",
+  "investigator_verdict": "uncertain",
+  "confidence": "low",
+  "citations_check": "partially_supported",
+  "likely_artifact": false,
+  "druggable": false,
+  "class": "other"
+}

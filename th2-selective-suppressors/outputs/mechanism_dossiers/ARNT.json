@@ -1,0 +1,11 @@
+{
+  "gene": "ARNT",
+  "verdict": "uncertain",
+  "hypothesis": "ARNT (HIF-1\u03b2) is the obligate dimerization partner for HIF-1\u03b1/HIF-2\u03b1, and because stimulation-induced HIF signaling promotes the GATA3/IL-4 Th2 program while Th1/T-bet is relatively HIF-independent, ARNT knockdown collapses HIF output and selectively lowers Th2 without inducing Th1.",
+  "investigator_verdict": "plausible",
+  "confidence": "medium",
+  "citations_check": "partially_supported",
+  "likely_artifact": false,
+  "druggable": false,
+  "class": "TF"
+}

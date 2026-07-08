@@ -1,0 +1,11 @@
+{
+  "gene": "RAB21",
+  "verdict": "likely_artifact",
+  "hypothesis": "Loss of RAB21 could preferentially blunt the highly glycolysis/mTOR-dependent Th2 (GATA3/IL4) program by mis-sorting surface GLUT1 and impairing receptor recycling, without inducing T-bet/Th1.",
+  "investigator_verdict": "uncertain",
+  "confidence": "low",
+  "citations_check": "supported",
+  "likely_artifact": true,
+  "druggable": false,
+  "class": "other"
+}

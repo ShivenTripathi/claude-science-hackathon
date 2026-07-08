@@ -1,0 +1,11 @@
+{
+  "gene": "KDM2A",
+  "verdict": "likely_artifact",
+  "hypothesis": "Because KDM2A is tightly coupled to PI3K/mTOR/SGK1-driven rRNA transcription, ribosome biogenesis and proliferation, its knockdown most likely dampens the highly proliferation/autocrine-amplified Th2 program more than the low-baseline Th1 program in a Th2-polarizing assay, rather than acting as a bona fide selective GATA3/IL4 regulator.",
+  "investigator_verdict": "likely_artifact",
+  "confidence": "medium",
+  "citations_check": "supported",
+  "likely_artifact": true,
+  "druggable": false,
+  "class": "TF"
+}

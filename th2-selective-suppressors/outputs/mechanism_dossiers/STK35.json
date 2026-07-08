@@ -1,0 +1,11 @@
+{
+  "gene": "STK35",
+  "verdict": "unlikely",
+  "hypothesis": "Losing STK35 could lower the Th2 program indirectly by blunting the AKT/glycolysis-driven proliferative and metabolic burst that GATA3/IL4 induction disproportionately depends on, rather than by acting as a dedicated Th2 transcriptional regulator.",
+  "investigator_verdict": "uncertain",
+  "confidence": "low",
+  "citations_check": "partially_supported",
+  "likely_artifact": true,
+  "druggable": true,
+  "class": "kinase"
+}

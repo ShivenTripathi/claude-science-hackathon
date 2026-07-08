@@ -1,0 +1,11 @@
+{
+  "gene": "ELAVL1",
+  "verdict": "uncertain",
+  "hypothesis": "Knockdown of ELAVL1 (HuR) removes AU-rich-element-mediated stabilization of GATA3, IL4, and IL13 mRNAs, collapsing the Th2 program post-transcriptionally without needing to induce the Th1/T-bet axis.",
+  "investigator_verdict": "plausible",
+  "confidence": "medium",
+  "citations_check": "partially_supported",
+  "likely_artifact": false,
+  "druggable": false,
+  "class": "other"
+}

@@ -1,0 +1,11 @@
+{
+  "gene": "MIA2",
+  "verdict": "likely_artifact",
+  "hypothesis": "If MIA2 knockdown selectively lowered the Th2 program, it would most plausibly be by degrading the ER-export/secretory capacity that autocrine IL-4/STAT6/GATA3 feedback (and the high secretory load of Th2 cells) depends on, rather than by any Th2-specific transcriptional role.",
+  "investigator_verdict": "unlikely",
+  "confidence": "medium",
+  "citations_check": "partially_supported",
+  "likely_artifact": true,
+  "druggable": false,
+  "class": "other"
+}

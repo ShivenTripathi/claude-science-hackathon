@@ -1,0 +1,1160 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Selective Th2 Suppressors — Project Spec & Primer</title>
+<style>
+  /* ============================ TOKENS ============================ */
+  :root{
+    --bg:#F4F5F9; --surface:#FFFFFF; --surface-2:#EEF0F6; --surface-3:#E6E9F2;
+    --border:#DBDFEA; --border-strong:#C4C9D8;
+    --ink:#161A22; --ink-2:#474D5E; --ink-3:#7A8194;
+    --accent:#4A54E1; --accent-2:#eef0ff; --on-accent:#ffffff;
+    --th2:#D3437A; --th2-soft:#fbe7f0;   /* rose  = the allergy program we want OFF */
+    --th1:#1391A3; --th1-soft:#e0f3f6;   /* teal  = the inflammatory program we must NOT trigger */
+    --find:#B9791A; --find-soft:#f8eed7; /* gold  = the finding / novel candidate */
+    --reject:#8A90A1;
+    --shadow:0 1px 2px rgba(20,26,40,.04), 0 8px 24px -14px rgba(20,26,40,.18);
+    --r:14px; --r-sm:9px;
+    --serif:"Iowan Old Style","New York","Palatino Linotype",Palatino,Georgia,serif;
+    --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --mono:ui-monospace,"SF Mono","JetBrains Mono","Cascadia Code",Menlo,Consolas,monospace;
+    --maxw:1080px; --readw:720px;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{
+      --bg:#0D0F15; --surface:#151824; --surface-2:#1B1F2D; --surface-3:#232838;
+      --border:#282E3E; --border-strong:#39415440;
+      --ink:#ECEEF5; --ink-2:#AEB4C4; --ink-3:#727A8D;
+      --accent:#828BFF; --accent-2:#1b1f38; --on-accent:#0D0F15;
+      --th2:#F06A9B; --th2-soft:#2a1621;
+      --th1:#3DBCCE; --th1-soft:#0d2a2f;
+      --find:#E1A93E; --find-soft:#2b2213;
+      --reject:#6B7285;
+      --shadow:0 1px 2px rgba(0,0,0,.3), 0 12px 30px -16px rgba(0,0,0,.6);
+    }
+  }
+  :root[data-theme="light"]{
+    --bg:#F4F5F9; --surface:#FFFFFF; --surface-2:#EEF0F6; --surface-3:#E6E9F2;
+    --border:#DBDFEA; --border-strong:#C4C9D8;
+    --ink:#161A22; --ink-2:#474D5E; --ink-3:#7A8194;
+    --accent:#4A54E1; --accent-2:#eef0ff; --on-accent:#ffffff;
+    --th2:#D3437A; --th2-soft:#fbe7f0; --th1:#1391A3; --th1-soft:#e0f3f6;
+    --find:#B9791A; --find-soft:#f8eed7; --reject:#8A90A1;
+    --shadow:0 1px 2px rgba(20,26,40,.04), 0 8px 24px -14px rgba(20,26,40,.18);
+  }
+  :root[data-theme="dark"]{
+    --bg:#0D0F15; --surface:#151824; --surface-2:#1B1F2D; --surface-3:#232838;
+    --border:#282E3E; --border-strong:#39415440;
+    --ink:#ECEEF5; --ink-2:#AEB4C4; --ink-3:#727A8D;
+    --accent:#828BFF; --accent-2:#1b1f38; --on-accent:#0D0F15;
+    --th2:#F06A9B; --th2-soft:#2a1621; --th1:#3DBCCE; --th1-soft:#0d2a2f;
+    --find:#E1A93E; --find-soft:#2b2213; --reject:#6B7285;
+    --shadow:0 1px 2px rgba(0,0,0,.3), 0 12px 30px -16px rgba(0,0,0,.6);
+  }
+
+  /* ============================ BASE ============================ */
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);
+    line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 22px}
+  .read{max-width:var(--readw)}
+  h1,h2,h3{text-wrap:balance;line-height:1.15;margin:0}
+  p{margin:0}
+  a{color:var(--accent);text-decoration:none;border-bottom:1px solid transparent}
+  a:hover{border-bottom-color:currentColor}
+  code,.mono{font-family:var(--mono)}
+  .prose{font-family:var(--serif);font-size:1.06rem;color:var(--ink-2)}
+  .prose strong{color:var(--ink);font-weight:600}
+  .gene{font-family:var(--mono);font-weight:600;font-size:.92em;
+    background:var(--surface-2);border:1px solid var(--border);border-radius:5px;
+    padding:.03em .38em;color:var(--ink)}
+  .eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--ink-3);font-weight:600}
+  .tnum{font-variant-numeric:tabular-nums}
+  :focus-visible{outline:2.5px solid var(--accent);outline-offset:2px;border-radius:4px}
+
+  /* ============================ NAV ============================ */
+  nav{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--bg) 82%,transparent);
+    backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+  .nav-in{max-width:var(--maxw);margin:0 auto;padding:9px 22px;display:flex;
+    align-items:center;gap:16px}
+  .brand{font-family:var(--mono);font-weight:700;font-size:.84rem;letter-spacing:.02em;
+    color:var(--ink);display:flex;align-items:center;gap:8px;white-space:nowrap}
+  .brand .dot{width:9px;height:9px;border-radius:50%;
+    background:radial-gradient(circle at 35% 35%,var(--th2),var(--accent))}
+  .nav-links{display:flex;gap:2px;margin-left:auto;overflow-x:auto;scrollbar-width:none}
+  .nav-links::-webkit-scrollbar{display:none}
+  .nav-links a{font-size:.8rem;color:var(--ink-2);padding:5px 10px;border-radius:7px;
+    border-bottom:none;white-space:nowrap}
+  .nav-links a:hover{background:var(--surface-2);color:var(--ink)}
+  .theme-btn{flex:0 0 auto;font-family:var(--mono);font-size:.74rem;cursor:pointer;
+    background:var(--surface-2);border:1px solid var(--border);color:var(--ink-2);
+    border-radius:7px;padding:6px 9px;line-height:1}
+  .theme-btn:hover{color:var(--ink);border-color:var(--border-strong)}
+
+  /* ============================ HERO ============================ */
+  header.hero{padding:62px 0 38px}
+  .kicker{display:inline-flex;align-items:center;gap:9px;font-family:var(--mono);
+    font-size:.74rem;color:var(--ink-2);background:var(--surface);border:1px solid var(--border);
+    padding:6px 12px;border-radius:100px;margin-bottom:26px;box-shadow:var(--shadow)}
+  .kicker .live{width:7px;height:7px;border-radius:50%;background:var(--find);
+    box-shadow:0 0 0 0 var(--find);animation:pulse 2.6s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--find) 60%,transparent)}
+    70%{box-shadow:0 0 0 7px transparent}100%{box-shadow:0 0 0 0 transparent}}
+  header.hero h1{font-size:clamp(2rem,4.6vw,3.15rem);font-weight:680;letter-spacing:-.02em}
+  header.hero h1 .hl{color:var(--th2)}
+  header.hero h1 .hl2{color:var(--th1)}
+  .dek{font-family:var(--serif);font-size:clamp(1.05rem,2vw,1.28rem);color:var(--ink-2);
+    margin-top:22px;max-width:660px;line-height:1.5}
+  .onel{margin-top:26px;padding:16px 18px;background:var(--surface);border:1px solid var(--border);
+    border-left:3px solid var(--accent);border-radius:var(--r-sm);box-shadow:var(--shadow);
+    font-family:var(--mono);font-size:.86rem;color:var(--ink);line-height:1.55;max-width:720px}
+  .hero-meta{display:flex;flex-wrap:wrap;gap:9px;margin-top:24px}
+  .chip{font-family:var(--mono);font-size:.73rem;color:var(--ink-2);background:var(--surface-2);
+    border:1px solid var(--border);border-radius:100px;padding:5px 11px}
+  .chip b{color:var(--ink);font-weight:600}
+
+  /* ============================ SECTIONS ============================ */
+  section{padding:40px 0;border-top:1px solid var(--border)}
+  .sec-head{display:flex;align-items:baseline;gap:14px;margin-bottom:8px}
+  .sec-num{font-family:var(--mono);font-size:.8rem;color:var(--accent);font-weight:700;
+    flex:0 0 auto}
+  .sec-head h2{font-size:clamp(1.4rem,3vw,1.9rem);font-weight:660;letter-spacing:-.015em}
+  .sec-sub{font-family:var(--serif);color:var(--ink-3);font-size:1rem;margin:2px 0 26px;
+    padding-left:34px}
+  @media(max-width:560px){.sec-sub{padding-left:0}}
+  .stack>*+*{margin-top:16px}
+
+  /* ============================ CARDS / PANELS ============================ */
+  .panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);
+    box-shadow:var(--shadow);overflow:hidden}
+  .panel-cap{display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+    padding:12px 16px;border-bottom:1px solid var(--border);background:var(--surface-2)}
+  .panel-cap .tag{font-family:var(--mono);font-size:.7rem;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--ink-3);font-weight:600}
+  .panel-cap h3{font-size:.98rem;font-weight:640;color:var(--ink)}
+  .panel-body{padding:18px 16px}
+  .synthetic{margin-left:auto;font-family:var(--mono);font-size:.68rem;color:var(--find);
+    background:var(--find-soft);border:1px solid color-mix(in srgb,var(--find) 30%,transparent);
+    padding:3px 8px;border-radius:6px}
+
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  @media(max-width:720px){.grid2,.grid3{grid-template-columns:1fr}}
+
+  /* ---- fate explorer ---- */
+  .fates{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+  @media(max-width:560px){.fates{grid-template-columns:repeat(2,1fr)}}
+  .fate{cursor:pointer;text-align:left;background:var(--surface-2);border:1px solid var(--border);
+    border-radius:var(--r-sm);padding:12px 12px;transition:transform .12s,border-color .12s;
+    font-family:var(--sans)}
+  .fate:hover{transform:translateY(-2px);border-color:var(--border-strong)}
+  .fate .tf{font-family:var(--mono);font-weight:700;font-size:1.02rem;color:var(--ink)}
+  .fate .nm{font-size:.78rem;color:var(--ink-3);margin-top:1px}
+  .fate[aria-pressed="true"]{border-color:var(--sel);background:color-mix(in srgb,var(--sel) 12%,var(--surface))}
+  .fate[aria-pressed="true"] .tf{color:var(--sel)}
+  .fate.th2{--sel:var(--th2)} .fate.th1{--sel:var(--th1)}
+  .fate.th17{--sel:#7A57C9} .fate.treg{--sel:#3E8E4E}
+  .fate-detail{margin-top:14px;padding:14px 15px;border-radius:var(--r-sm);
+    background:var(--surface-2);border:1px solid var(--border);min-height:78px}
+  .fate-detail .row{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px}
+  .cyto{font-family:var(--mono);font-size:.76rem;background:var(--surface);border:1px solid var(--border);
+    border-radius:6px;padding:3px 8px;color:var(--ink-2)}
+
+  /* ---- perturb-seq stepper ---- */
+  .steps{display:flex;gap:0;flex-wrap:wrap}
+  .step{flex:1;min-width:120px;position:relative;padding:2px 12px 2px 0}
+  .step .n{font-family:var(--mono);font-size:.7rem;color:var(--ink-3);font-weight:700}
+  .step h4{font-size:.9rem;margin:3px 0 4px;font-weight:640;color:var(--ink)}
+  .step p{font-size:.82rem;color:var(--ink-2);line-height:1.45}
+  .step:not(:last-child)::after{content:"→";position:absolute;right:2px;top:0;color:var(--ink-3);
+    font-size:1rem}
+  @media(max-width:640px){.step:not(:last-child)::after{content:"↓";right:auto;left:0;top:auto;bottom:-4px}
+    .step{min-width:100%;padding:6px 0 18px}}
+
+  /* ============================ PLANE (canvas) ============================ */
+  .plane-ctrls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:14px}
+  .toggle{display:inline-flex;align-items:center;gap:9px;cursor:pointer;font-size:.84rem;
+    color:var(--ink-2);user-select:none}
+  .switch{width:40px;height:23px;border-radius:100px;background:var(--surface-3);
+    border:1px solid var(--border-strong);position:relative;transition:background .18s;flex:0 0 auto}
+  .switch::after{content:"";position:absolute;top:2px;left:2px;width:17px;height:17px;border-radius:50%;
+    background:var(--surface);box-shadow:0 1px 3px rgba(0,0,0,.3);transition:transform .18s}
+  .toggle input{position:absolute;opacity:0;width:0;height:0}
+  .toggle input:checked+.switch{background:var(--accent)}
+  .toggle input:checked+.switch::after{transform:translateX(17px)}
+  .toggle input:focus-visible+.switch{outline:2.5px solid var(--accent);outline-offset:2px}
+  .canvas-hold{position:relative;width:100%}
+  canvas{display:block;width:100%;height:auto;border-radius:var(--r-sm);
+    background:var(--surface);cursor:crosshair;touch-action:none}
+  .tip{position:absolute;pointer-events:none;opacity:0;transform:translate(-50%,-118%);
+    background:var(--ink);color:var(--bg);font-family:var(--mono);font-size:.72rem;
+    padding:6px 9px;border-radius:7px;white-space:nowrap;transition:opacity .1s;z-index:5;line-height:1.4}
+  .tip b{color:var(--bg)}
+  .legend{display:flex;flex-wrap:wrap;gap:14px;margin-top:14px;font-size:.78rem;color:var(--ink-2)}
+  .legend span{display:inline-flex;align-items:center;gap:7px}
+  .legend i{width:11px;height:11px;border-radius:50%;flex:0 0 auto}
+  .aha{margin-top:14px;padding:12px 14px;border-radius:var(--r-sm);font-size:.86rem;
+    background:var(--accent-2);border:1px solid color-mix(in srgb,var(--accent) 26%,transparent);
+    color:var(--ink);line-height:1.5}
+
+  /* ============================ FILTER WIDGET ============================ */
+  .sliders{display:grid;grid-template-columns:1fr 1fr;gap:16px 22px;margin-bottom:6px}
+  @media(max-width:560px){.sliders{grid-template-columns:1fr}}
+  .sld label{display:flex;justify-content:space-between;font-size:.82rem;color:var(--ink-2);
+    margin-bottom:6px;gap:8px}
+  .sld label b{font-family:var(--mono);color:var(--ink);font-weight:600}
+  .sld .hint{font-size:.72rem;color:var(--ink-3);margin-top:4px;line-height:1.4}
+  input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:5px;border-radius:100px;
+    background:var(--surface-3);outline-offset:4px}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;
+    background:var(--accent);border:2.5px solid var(--surface);box-shadow:var(--shadow);cursor:pointer}
+  input[type=range]::-moz-range-thumb{width:15px;height:15px;border-radius:50%;background:var(--accent);
+    border:2.5px solid var(--surface);cursor:pointer}
+  .buckets{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:22px}
+  @media(max-width:720px){.buckets{grid-template-columns:1fr}}
+  .bucket{border:1px solid var(--border);border-radius:var(--r-sm);background:var(--surface-2);
+    padding:12px;min-height:120px}
+  .bucket-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+  .bucket-hd .t{font-size:.82rem;font-weight:640;display:flex;align-items:center;gap:7px}
+  .bucket-hd .t i{width:10px;height:10px;border-radius:3px}
+  .bucket-hd .c{font-family:var(--mono);font-weight:700;font-size:1rem;
+    font-variant-numeric:tabular-nums}
+  .bkt-find{border-color:color-mix(in srgb,var(--find) 40%,transparent);
+    background:var(--find-soft)}
+  .bkt-find .c{color:var(--find)}
+  .row-g{display:flex;align-items:center;gap:7px;font-family:var(--mono);font-size:.77rem;
+    padding:4px 6px;border-radius:6px;color:var(--ink)}
+  .row-g:hover{background:var(--surface)}
+  .row-g .sym{font-weight:700;min-width:56px}
+  .row-g .why{color:var(--ink-3);font-size:.72rem;font-family:var(--sans);margin-left:auto}
+  .row-g .mini{font-size:.68rem;color:var(--ink-3)}
+  .dotm{width:7px;height:7px;border-radius:50%;flex:0 0 auto}
+
+  /* ============================ CALLOUTS ============================ */
+  .callout{border-radius:var(--r);padding:18px 18px;border:1px solid var(--border);
+    background:var(--surface);box-shadow:var(--shadow)}
+  .callout.warn{border-left:3px solid var(--th2);background:var(--th2-soft)}
+  .callout.win{border-left:3px solid var(--find);background:var(--find-soft)}
+  .callout h3{font-size:1rem;font-weight:660;margin-bottom:7px;display:flex;gap:8px;align-items:center}
+  .callout p{font-size:.92rem;color:var(--ink-2)}
+  .callout.warn p,.callout.warn h3{color:var(--ink)}
+
+  /* personal see-saw band */
+  .seesaw{display:grid;grid-template-columns:1fr auto 1fr;align-items:stretch;
+    border:1px solid var(--border);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow)}
+  @media(max-width:640px){.seesaw{grid-template-columns:1fr}}
+  .pole{padding:20px 18px;background:var(--surface)}
+  .pole.a{border-top:3px solid var(--th2)} .pole.b{border-top:3px solid var(--th1)}
+  .pole .lab{font-family:var(--mono);font-size:.68rem;letter-spacing:.11em;text-transform:uppercase;font-weight:700}
+  .pole.a .lab{color:var(--th2)} .pole.b .lab{color:var(--th1)}
+  .pole h4{font-size:1.1rem;font-weight:660;margin:7px 0 1px}
+  .pole .dis{font-family:var(--mono);font-size:.76rem;color:var(--ink-3);margin-bottom:11px}
+  .pole p{font-size:.88rem;color:var(--ink-2);line-height:1.5}
+  .pole p em{color:var(--ink);font-style:normal;font-weight:600}
+  .pole .role-tag{display:inline-block;margin-top:13px;font-family:var(--mono);font-size:.7rem;
+    padding:3px 10px;border-radius:100px;font-weight:600}
+  .pole.a .role-tag{background:var(--th2-soft);color:var(--th2)}
+  .pole.b .role-tag{background:var(--th1-soft);color:var(--th1)}
+  .fulcrum{display:flex;align-items:center;justify-content:center;padding:0 6px;background:var(--surface-2);
+    border-left:1px solid var(--border);border-right:1px solid var(--border);font-family:var(--mono);
+    font-size:.66rem;color:var(--ink-3);writing-mode:vertical-rl;text-orientation:mixed;
+    letter-spacing:.14em;text-transform:uppercase}
+  @media(max-width:640px){.fulcrum{writing-mode:horizontal-tb;border:none;
+    border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:9px}}
+  .insight-band{margin-top:16px;padding:20px 20px;border-radius:var(--r);
+    background:linear-gradient(102deg,var(--th2-soft),var(--accent-2) 52%,var(--th1-soft));
+    border:1px solid var(--border)}
+  .insight-band p{font-family:var(--serif);font-size:1.05rem;color:var(--ink);line-height:1.55}
+  .insight-band p strong{font-weight:700}
+  .insight-band .rc{font-family:var(--sans);font-size:.83rem;color:var(--ink-2);margin-top:13px;
+    padding-top:13px;border-top:1px solid color-mix(in srgb,var(--ink-3) 28%,transparent)}
+
+  /* file pills */
+  .file{font-family:var(--mono);font-size:.78rem;background:var(--surface-2);border:1px solid var(--border);
+    border-radius:6px;padding:2px 7px;color:var(--th1);white-space:nowrap}
+
+  /* pipeline */
+  .pipe{display:flex;flex-direction:column;gap:2px}
+  .phase{display:grid;grid-template-columns:44px 1fr;gap:14px;padding:14px 0;
+    border-top:1px dashed var(--border)}
+  .phase:first-child{border-top:none}
+  .phase .pn{font-family:var(--mono);font-weight:700;color:var(--accent);font-size:.9rem;
+    padding-top:2px}
+  .phase h4{font-size:1rem;font-weight:640;margin-bottom:5px}
+  .phase p{font-size:.9rem;color:var(--ink-2)}
+  .phase .files{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
+
+  /* labor split */
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:640px){.split{grid-template-columns:1fr}}
+  .who{border:1px solid var(--border);border-radius:var(--r);padding:16px;background:var(--surface)}
+  .who h4{font-size:.95rem;font-weight:660;margin-bottom:3px}
+  .who .role{font-family:var(--mono);font-size:.72rem;color:var(--ink-3);margin-bottom:11px}
+  .who ul{margin:0;padding-left:18px;font-size:.88rem;color:var(--ink-2);line-height:1.6}
+  .who.you{border-top:3px solid var(--accent)}
+  .who.bio{border-top:3px solid var(--th1)}
+
+  /* risk ledger */
+  .ledger{display:flex;flex-direction:column;gap:0}
+  .risk{display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:14px 0;border-top:1px solid var(--border)}
+  .risk:first-child{border-top:none}
+  @media(max-width:640px){.risk{grid-template-columns:1fr;gap:6px}}
+  .risk .r-t{font-weight:620;font-size:.9rem;color:var(--ink);display:flex;gap:8px;align-items:baseline}
+  .risk .r-t .sev{font-family:var(--mono);font-size:.66rem;padding:2px 6px;border-radius:5px;flex:0 0 auto}
+  .sev.hi{background:var(--th2-soft);color:var(--th2)}
+  .sev.md{background:var(--find-soft);color:var(--find)}
+  .risk p{font-size:.86rem;color:var(--ink-2)}
+  .risk .fix{color:var(--th1)}
+
+  footer{padding:40px 0 70px;border-top:1px solid var(--border);color:var(--ink-3);font-size:.82rem}
+  footer a{color:var(--ink-2)}
+  .srcs{display:flex;flex-direction:column;gap:5px;margin-top:12px;font-family:var(--mono);font-size:.74rem}
+
+  /* code + copy + assay blocks */
+  .codewrap{border:1px solid var(--border);border-radius:var(--r);overflow:hidden;
+    background:var(--surface);box-shadow:var(--shadow)}
+  .codewrap .bar{display:flex;align-items:center;gap:9px;padding:9px 14px;background:var(--surface-2);
+    border-bottom:1px solid var(--border);font-family:var(--mono);font-size:.72rem;color:var(--ink-3)}
+  .codewrap .bar .dt{width:9px;height:9px;border-radius:50%;background:var(--th2);opacity:.55;flex:0 0 auto}
+  .codewrap pre{margin:0;padding:16px;overflow-x:auto;font-family:var(--mono);font-size:.75rem;
+    line-height:1.62;color:var(--ink);tab-size:2}
+  .codewrap pre b{color:var(--accent);font-weight:600}
+  .codewrap pre em{color:var(--ink-3);font-style:normal}
+  .copyblock{border:1px solid var(--border);border-left:3px solid var(--th1);border-radius:var(--r-sm);
+    background:var(--surface);box-shadow:var(--shadow);padding:17px 18px;font-family:var(--serif);
+    font-size:.98rem;color:var(--ink);line-height:1.62;white-space:pre-wrap}
+  .copyblock .opt{display:block;margin-top:13px;padding-top:13px;border-top:1px dashed var(--border);
+    font-family:var(--sans);font-size:.83rem;color:var(--ink-3);white-space:normal}
+  .subh{font-size:1rem;font-weight:640;margin:6px 0 11px;color:var(--ink)}
+  .tblwrap{overflow-x:auto;border:1px solid var(--border);border-radius:var(--r);background:var(--surface);
+    box-shadow:var(--shadow)}
+  table.assay{width:100%;border-collapse:collapse;font-size:.83rem;min-width:520px}
+  table.assay th,table.assay td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--border);
+    vertical-align:top;color:var(--ink-2)}
+  table.assay th{font-family:var(--mono);font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;
+    color:var(--ink-3);font-weight:600}
+  table.assay tr:last-child td{border-bottom:none}
+  table.assay td .cost{font-family:var(--mono);font-size:.7rem;padding:2px 8px;border-radius:5px;font-weight:600}
+  .cost.lo{background:var(--th1-soft);color:var(--th1)}
+  .cost.md{background:var(--find-soft);color:var(--find)}
+  .cost.hi{background:var(--th2-soft);color:var(--th2)}
+  table.assay tr.win td{background:color-mix(in srgb,var(--find) 10%,transparent);color:var(--ink)}
+  .win-badge{font-family:var(--mono);font-size:.64rem;color:var(--find);font-weight:700;white-space:nowrap}
+
+  /* live results dashboard */
+  .steps-live{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px}
+  .pstep{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:.76rem;
+    padding:7px 13px;border-radius:100px;border:1px solid var(--border);background:var(--surface)}
+  .pstep .d{width:8px;height:8px;border-radius:50%;flex:0 0 auto}
+  .pstep.done{border-color:color-mix(in srgb,var(--th1) 45%,transparent);color:var(--ink)}
+  .pstep.done .d{background:var(--th1)}
+  .pstep.now{border-color:color-mix(in srgb,var(--find) 50%,transparent);background:var(--find-soft);color:var(--ink)}
+  .pstep.now .d{background:var(--find);animation:pulse 2.6s infinite}
+  .pstep.next{color:var(--ink-3)} .pstep.next .d{background:var(--border-strong)}
+  .statgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  @media(max-width:720px){.statgrid{grid-template-columns:repeat(2,1fr)}}
+  .stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);
+    padding:16px 16px;box-shadow:var(--shadow)}
+  .stat .big{font-family:var(--mono);font-size:1.75rem;font-weight:700;line-height:1;letter-spacing:-.02em;
+    font-variant-numeric:tabular-nums}
+  .stat .lbl{font-size:.79rem;color:var(--ink-2);margin-top:8px;line-height:1.35}
+  .stat .sub{font-size:.71rem;color:var(--ink-3);font-family:var(--mono);margin-top:6px}
+  .tg{font-family:var(--mono);font-size:.66rem;padding:2px 8px;border-radius:5px;font-weight:700;white-space:nowrap}
+  .tg-o{background:var(--th1-soft);color:var(--th1)}
+  .tg-k{background:var(--accent-2);color:var(--accent)}
+  .tg-s{background:var(--th2-soft);color:var(--th2)}
+
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<nav>
+  <div class="nav-in">
+    <div class="brand"><span class="dot"></span>SELECTIVE&nbsp;Th2&nbsp;SUPPRESSORS</div>
+    <div class="nav-links">
+      <a href="#results">Results</a>
+      <a href="#primer">Primer</a>
+      <a href="#situation">The trap</a>
+      <a href="#plane">The wedge</a>
+      <a href="#personal">Personal</a>
+      <a href="#filter">The filter</a>
+      <a href="#pipeline">Pipeline</a>
+      <a href="#team">Team</a>
+      <a href="#risk">Risks</a>
+      <a href="#priorart">Prior art</a>
+      <a href="#message">Message</a>
+      <a href="#code">Code</a>
+      <a href="#build">Build kit</a>
+    </div>
+    <button class="theme-btn" id="themeBtn" aria-label="Toggle light or dark theme">◐ theme</button>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="kicker"><span class="live"></span>Calibrated negative result · the naive selective-suppressor atlas doesn't survive matched-arm stats</span>
+    <h1>Find the knockdowns that switch off <span class="hl">allergy</span> without switching on <span class="hl2">inflammation</span>.</h1>
+    <p class="dek">A one-page spec and playable primer. Start at the top knowing nothing about T cells; leave able to defend a genuinely novel finding to the people who built the dataset.</p>
+    <div class="onel">
+      <strong style="color:var(--accent)">The one line:</strong> From the Marson genome-scale CD4⁺ T-cell Perturb-seq atlas, surface gene knockdowns that <em>selectively collapse the Th2 program</em> (↓ IL4/IL5/IL13/GATA3) <em>without pushing cells into Th1</em> (↑ IFNG/TBX21) — each with a data-grounded mechanism and the single cheapest experiment that would confirm it.
+    </div>
+    <div class="hero-meta">
+      <span class="chip"><b>Dataset</b> ~22M cells · 4 donors · CRISPRi</span>
+      <span class="chip" style="border-color:var(--th2)"><b style="color:var(--th2)">Result</b> calibrated negative — GATA3 is a Th1-skewer</span>
+      <span class="chip"><b>Tool</b> Claude Science</span>
+      <span class="chip"><b>Th2 disease</b> asthma · eczema</span>
+      <span class="chip"><b>Method</b> streams a 16.8 GB matrix, no download</span>
+      <span class="chip" style="border-color:var(--th2)"><b style="color:var(--th2)">Personal</b> I live with asthma + alopecia</span>
+      <span class="chip"><b>Prize hook</b> Gladstone “overcome disease”</span>
+    </div>
+  </div>
+</header>
+
+<!-- ============ RESULTS (LIVE) ============ -->
+<section id="results"><div class="wrap">
+  <div class="sec-head"><span class="sec-num" style="color:var(--find)">●</span><h2>What we found — live results</h2></div>
+  <p class="sec-sub">Independent re-analysis of the full genome-scale atlas — and an honest reversal.</p>
+
+  <div class="steps-live">
+    <span class="pstep done"><span class="d"></span>Pipeline built ✓</span>
+    <span class="pstep done"><span class="d"></span>Hardening + triage ✓</span>
+    <span class="pstep done"><span class="d"></span>Verification → reversal ✓</span>
+  </div>
+
+  <div class="callout warn" style="border-left-color:var(--th2)">
+    <h3>⚑ Outcome: a calibrated <em>negative</em> result</h3>
+    <p>The naive selective-suppressor atlas <b>does not survive rigorous statistics.</b> Under a clean <b>matched Th1-vs-Th0 arm</b>, the apparent "top selective hit" <b>GATA3 is actually a Th1-skewer</b> — its knockdown <em>induces</em> the Th1 program (≈ +2.8 SD), textbook reciprocity, not selective suppression. STAT6, IL4R, and even ARNT flag the same way. The earlier positive shortlist rode a noisy Th1 signature plus a magnitude-confounded scoring metric. What <em>is</em> real: the reproducible streaming pipeline, the QC catch below, and the negative result itself.</p>
+  </div>
+
+  <div class="statgrid">
+    <div class="stat"><div class="big" style="color:var(--th2)">Th1-skewer</div><div class="lbl">GATA3 — the apparent top hit — <em>induces</em> Th1 under a matched arm</div><div class="sub">≈ +2.8 SD</div></div>
+    <div class="stat"><div class="big">FDR ≈ 1</div><div class="lbl">the "selective" set is not enriched over random gene sets</div><div class="sub">permutation null</div></div>
+    <div class="stat"><div class="big">artifact</div><div class="lbl">the +0.49 arm "confound" was mostly a scoring artifact</div><div class="sub">+0.54 → +0.18 competitive</div></div>
+    <div class="stat"><div class="big" style="color:var(--th1)">2.5 MB</div><div class="lbl">the one real win: a QC catch fixed a silent gene-scramble — no 16.8 GB download</div><div class="sub">kept</div></div>
+  </div>
+
+  <div class="read stack" style="margin-top:22px">
+    <div class="callout win">
+      <h3>◆ A QC guardrail caught a silent gene-label scramble</h3>
+      <p>The arm scores turned out to be in a <em>different row order</em> than the annotation table (only 0.9% overlap) — attaching them naively mislabeled every gene, so the "top suppressors" came out as biological nonsense. A targeted <b>2.5 MB</b> read of the atlas's row index (instead of the 16.8 GB matrix) recovered the true order. After the fix, the top hits are a clean cluster of chromatin/transcription regulators and <b>GATA3 lands at #6</b> — the calibration that says the whole ranking can be trusted.</p>
+    </div>
+    <div class="callout warn">
+      <h3>⚠ Finding: Th2 master regulators do <em>not</em> phenocopy each other</h3>
+      <p>Knocking down GATA3 vs STAT6 vs IL4R produces nearly <b>orthogonal</b> transcriptomes (GATA3–STAT6 correlation ≈ −0.1). They're all "Th2 regulators" but act through distinct routes — so you <em>can't</em> validate a novel regulator just by transcriptome-similarity to GATA3. That tempered our confidence in one signal (coherence) and is itself a clean methodological result.</p>
+    </div>
+  </div>
+
+  <h3 class="subh" style="margin-top:26px">The shortlist that <em>looked</em> promising — and why it didn't hold</h3>
+  <p class="prose read" style="margin-bottom:14px">Under the naive two-arm scoring these ranked highest (validity × novelty × druggability). Kept here for transparency: <b>none survive the matched-arm + permutation tests</b> — most are global-effect / housekeeping false positives, and the E3/ubiquitin theme, while a tidy story, is not statistically enriched. This is what a plausible-but-wrong shortlist looks like.</p>
+  <div class="tblwrap"><table class="assay">
+    <thead><tr><th>Gene</th><th>Th2↓ z</th><th>Evidence</th><th>Novelty</th><th>Druggability</th><th>Why it stands out</th></tr></thead>
+    <tbody>
+      <tr class="win"><td><b>AMBRA1</b> <span class="win-badge">← top</span></td><td>−2.74</td><td>QC✓ · donor-robust · coherent (z2.6)</td><td>novel</td><td><span class="cost md">E3-adaptor</span></td><td>strong on <em>every</em> axis; Cullin-4 E3 substrate-receptor</td></tr>
+      <tr><td><b>UBA6</b></td><td>−2.72</td><td>QC✓ · coherent (z4.0 — top)</td><td>novel</td><td><span class="cost md">ubiquitin E1</span></td><td>strongest coherence in the set; E3/ubiquitin theme</td></tr>
+      <tr><td><b>ARNT</b></td><td>−3.24</td><td>QC✓ · donor-robust · stability 1.0</td><td>moderate</td><td><span class="cost hi">TF (hard)</span></td><td>selective across <em>every</em> threshold — rock-solid, but hard to drug</td></tr>
+      <tr><td><b>DPP4</b></td><td>−2.12</td><td>QC✓</td><td>novel</td><td><span class="cost lo">approved-target class</span></td><td>DPP4 / CD26 — the gliptin drug class; on T cells</td></tr>
+      <tr><td><b>RAB21</b></td><td>−2.53</td><td>QC✓ · donor-robust · coherent (z2.3)</td><td>moderate</td><td><span class="cost hi">—</span></td><td>dual evidence: arm + phenocopy</td></tr>
+      <tr><td><b>KDM4C</b></td><td>−2.21</td><td>QC✓</td><td>novel</td><td><span class="cost lo">druggable epigenetic</span></td><td>histone demethylase — small-molecule tractable</td></tr>
+      <tr><td><b>SAP130</b></td><td>−2.70</td><td>QC✓ · coherent (z2.0)</td><td>novel</td><td><span class="cost hi">—</span></td><td>Sin3A corepressor; dual evidence</td></tr>
+      <tr><td>P2RY8 · STK38</td><td>≈−2.1</td><td>QC✓</td><td>novel</td><td><span class="cost lo">GPCR · kinase</span></td><td>classic druggable classes</td></tr>
+    </tbody>
+  </table></div>
+  <p class="hint" style="margin-top:12px">Full ranked table lives in <span class="file">triage_ranked.csv</span>. "Coherent" = its knockdown reshapes the transcriptome like GATA3/STAT6 — rare (only 10/172).</p>
+
+  <h3 class="subh" style="margin-top:28px">The mechanism layer — worked example: <span class="mono" style="color:var(--find)">AMBRA1</span></h3>
+  <p class="prose read" style="margin-bottom:14px"><b>Illustrative, not a claim.</b> AMBRA1 was the least-bad candidate (modest Th2-down, Th1 roughly flat) but does <em>not</em> clear the hardened bar. It's kept to show the mechanism-card <em>format</em> — data + literature → a hypothesis with every claim tagged <span class="tg tg-o">observed</span> <span class="tg tg-k">known</span> <span class="tg tg-s">speculative</span>, plus the cheapest experiment to test it. The point of this layer is that it forces the speculative leap into the open — which is exactly why the honest verdict is "test, don't trust."</p>
+  <div class="panel">
+    <div class="panel-cap"><span class="tag">Mechanism card</span><h3>Why does knocking down AMBRA1 suppress Th2?</h3></div>
+    <div class="panel-body">
+      <p class="prose" style="margin-bottom:14px"><b>Hypothesis:</b> AMBRA1 sustains the Th2 program through its <b>PP2A</b>-regulatory role (PP2A promotes Th2); knocking it down reduces PP2A-dependent Th2 support, collapsing IL4/5/13 without engaging Th1. AMBRA1 is also the substrate receptor of a <b>CRL4 E3 ligase</b> that degrades cyclin D — a secondary, cell-cycle route.</p>
+      <div class="tblwrap"><table class="assay">
+        <thead><tr><th>Claim</th><th>Tag</th><th>Conf.</th><th>Source</th></tr></thead>
+        <tbody>
+          <tr><td>AMBRA1-KD selectively suppresses Th2 (Th2↓, Th1 flat)</td><td><span class="tg tg-o">observed</span></td><td>0.85</td><td>our data</td></tr>
+          <tr><td>AMBRA1-KD reshapes the transcriptome like GATA3-KD</td><td><span class="tg tg-o">observed</span></td><td>0.65</td><td>coherence z2.6</td></tr>
+          <tr><td>AMBRA1 is the CRL4 E3-ligase receptor for cyclin D</td><td><span class="tg tg-k">known</span></td><td>0.95</td><td>Nature 2021</td></tr>
+          <tr><td>AMBRA1 regulates CD4 differentiation via PP2A</td><td><span class="tg tg-k">known</span></td><td>0.70</td><td>Sci Rep 2024</td></tr>
+          <tr><td>PP2A promotes Th2 differentiation</td><td><span class="tg tg-k">known</span></td><td>0.60</td><td>PP2A lit</td></tr>
+          <tr><td>∴ AMBRA1 → PP2A → Th2 (so loss ↓ Th2)</td><td><span class="tg tg-s">speculative</span></td><td>0.40</td><td>inferred — test this</td></tr>
+        </tbody>
+      </table></div>
+      <div class="aha" style="margin-top:14px"><b>Cheapest discriminating experiment:</b> intracellular <b>cyclin D + GATA3 co-stain</b> after AMBRA1-KD. Cyclin D ↑ with GATA3 ↓ → the cell-cycle route; GATA3 ↓ with cyclin D flat → the PP2A route. ~1 week, existing antibodies. <b>Falsification flag:</b> AMBRA1's best-evidenced role is cyclin-D / cell-cycle, not direct Th2 — so the PP2A link is the speculative leap to nail down.</div>
+    </div>
+  </div>
+
+  <div class="callout warn" style="margin-top:20px">
+    <h3>What actually holds up</h3>
+    <p>• The <b>reproducible streaming pipeline</b> — reads a 16.8 GB matrix over HTTP byte-ranges, no download. • The <b>QC catch</b> — a silent arm-to-annotation gene-scramble, fixed with a 2.5 MB read. • The <b>calibrated negative result</b> itself — Th1/Th2 are genuinely reciprocal, so single-gene "selective" suppression is rare and this screen + metric can't establish it. • Before any target claim: a functional <b>IL-4/5/13 readout</b> and a control-guide FDR — not more transcriptomic scoring.</p>
+  </div>
+</div></section>
+
+<!-- ============ 1. PRIMER ============ -->
+<section id="primer"><div class="wrap">
+  <div class="sec-head"><span class="sec-num">01</span><h2>The biology, from zero</h2></div>
+  <p class="sec-sub">Four ideas. That's the whole ladder you need to climb before the project makes sense.</p>
+
+  <div class="stack">
+    <p class="prose read"><strong>1 · A CD4⁺ T cell is a conductor.</strong> It doesn't kill anything itself. When its receptor senses a threat, it <em>commits to a role</em> — and each role is defined by one master transcription factor (a gene that switches on a whole program) plus the signalling proteins (<em>cytokines</em>) it then secretes. Click a role to see what it does. <span class="gene">Th2</span> is ours.</p>
+
+    <div class="panel"><div class="panel-cap"><span class="tag">Interactive</span><h3>The four fates of a helper T cell</h3></div>
+      <div class="panel-body">
+        <div class="fates" id="fates">
+          <button class="fate th2" data-f="th2" aria-pressed="true"><div class="tf">GATA3</div><div class="nm">Th2 · our target</div></button>
+          <button class="fate th1" data-f="th1" aria-pressed="false"><div class="tf">T-bet</div><div class="nm">Th1</div></button>
+          <button class="fate th17" data-f="th17" aria-pressed="false"><div class="tf">RORγt</div><div class="nm">Th17</div></button>
+          <button class="fate treg" data-f="treg" aria-pressed="false"><div class="tf">FOXP3</div><div class="nm">Treg</div></button>
+        </div>
+        <div class="fate-detail" id="fateDetail"></div>
+      </div>
+    </div>
+
+    <p class="prose read"><strong>2 · Th2 is the allergy program — and a proven drug target.</strong> Th2 cells drive asthma, eczema and allergic inflammation through IL-4, IL-5 and IL-13. The blockbuster drug <em>dupilumab</em> works by blocking exactly this signalling. So “a ranked list of genes whose removal quiets Th2” reads directly as “candidate targets for allergic disease.” That's the sentence that wins the Gladstone “overcome disease” award.</p>
+
+    <p class="prose read"><strong>3 · Perturb-seq = break one gene per cell, then read the whole cell.</strong> You use CRISPR to silence a different gene in each of millions of cells, then sequence every cell's full set of active genes (its <em>transcriptome</em>). Each cell carries a barcode saying which gene was silenced. Aggregate the cells that share a target and you learn: <em>“what does the cell's program do when gene X is gone?”</em></p>
+
+    <div class="panel"><div class="panel-cap"><span class="tag">How the data is made</span><h3>One experiment, millions of single-gene knockdowns</h3></div>
+      <div class="panel-body">
+        <div class="steps">
+          <div class="step"><div class="n">01</div><h4>Pool</h4><p>Millions of identical CD4⁺ T cells in one dish.</p></div>
+          <div class="step"><div class="n">02</div><h4>Silence</h4><p>A virus drops <em>one</em> CRISPRi guide per cell — silencing one gene + leaving a barcode.</p></div>
+          <div class="step"><div class="n">03</div><h4>Stimulate</h4><p>Activate the cells; sample at Rest, 8 h, 48 h.</p></div>
+          <div class="step"><div class="n">04</div><h4>Read</h4><p>Sequence each cell → a cell×gene count matrix + its guide label.</p></div>
+          <div class="step"><div class="n">05</div><h4>Aggregate</h4><p>Pool cells per guide → the average effect of losing that gene.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <p class="prose read"><strong>4 · Two catches that make this real work, not a lookup.</strong> First, this dataset's cells are only <em>stimulated</em>, never chemically forced into Th2 — so “the Th2 program” is a <em>signature score</em> you compute from marker genes, not a cell type you can see. Second, CRISPRi silencing is partial and <strong>only works for roughly 40–50% of targeted genes</strong> — so “no effect” is ambiguous until you check the knockdown actually happened. Both catches are where careful engineering beats naive analysis.</p>
+  </div>
+</div></section>
+
+<!-- ============ 2. THE TRAP ============ -->
+<section id="situation"><div class="wrap">
+  <div class="sec-head"><span class="sec-num">02</span><h2>Why the obvious project is already dead</h2></div>
+  <p class="sec-sub">The most important slide. The people judging you wrote the paper last month.</p>
+  <div class="read stack">
+    <div class="callout warn">
+      <h3>⚠ The atlas already exists — and the judges shipped it</h3>
+      <p>The natural idea — “a genome-wide, confidence-ranked atlas of Th2 regulators across stimulation states, split into known vs novel” — is <strong>literally a published table</strong> from the Marson paper: <span class="file">polarization_prediction_…_coefficients.csv</span> (Fig 4). It's already ranked, already condition-split, already known/novel-flagged, already validated on held-out genes. Gladstone/Marson are on the judging panel. Handing them a re-run of their own figure is the worst outcome.</p>
+    </div>
+    <p class="prose">The meta-lesson generalizes: this dataset was published <em>weeks ago by your judges</em>, so <strong>any vanilla analysis is a novelty trap.</strong> The only way to win is to find the axis, the control, or the mechanism they <em>didn't</em> chase. Below is the cleanest one that exists.</p>
+  </div>
+</div></section>
+
+<!-- ============ 3. THE WEDGE / PLANE ============ -->
+<section id="plane"><div class="wrap">
+  <div class="sec-head"><span class="sec-num">03</span><h2>The wedge: their axis can't tell two things apart</h2></div>
+  <p class="sec-sub">Their model scores Th2-vs-Th1 as one number. Play with the toggle to see what that number hides.</p>
+
+  <p class="prose read" style="margin-bottom:20px">The paper ranks regulators along a single <em>bidirectional</em> Th2-vs-Th1 axis. But “suppress Th2” and “flip the cell to Th1” are <strong>different biological events with the same score</strong>. For an allergy drug you want the first (quiet the allergy) and <em>not</em> the second (don't trade allergy for inflammation). A one-dimensional axis structurally cannot separate them. This plot can.</p>
+
+  <div class="panel">
+    <div class="panel-cap"><span class="tag">Interactive · the core idea</span><h3>The Th2 × Th1 selectivity plane</h3>
+      <span class="synthetic">synthetic values — teaches the method</span></div>
+    <div class="panel-body">
+      <div class="plane-ctrls">
+        <label class="toggle"><input type="checkbox" id="axisToggle"><span class="switch"></span>
+          Collapse onto the paper's 1-D Th2-vs-Th1 axis</label>
+      </div>
+      <div class="canvas-hold">
+        <canvas id="plane" width="640" height="480" role="img"
+          aria-label="Scatter of gene knockdowns by their effect on the Th1 program (x) and Th2 program (y)."></canvas>
+        <div class="tip" id="tip"></div>
+      </div>
+      <div class="legend">
+        <span><i style="background:var(--find)"></i>Selective Th2 suppressor — the finding</span>
+        <span><i style="background:var(--th1)"></i>Flips to Th1 — a trap</span>
+        <span><i style="background:var(--th2)"></i>Known Th2 regulator — calibration</span>
+        <span><i style="background:var(--reject)"></i>Nonspecific / weak</span>
+      </div>
+      <div class="aha" id="ahaText"></div>
+    </div>
+  </div>
+  <div class="read stack" style="margin-top:20px">
+    <div class="callout win">
+      <h3>◆ Confirmed on real data (Haltavey's run)</h3>
+      <p>Scoring every perturbation on the two arms: the selective quadrant is real — <b>172 knockdowns push Th2 down while Th1 stays flat</b>, and true Th1-skewers are rare (<b>~4</b>). The surprise: the two arms are <b>positively correlated (r ≈ +0.49)</b> — the dominant axis across the screen is <em>global response magnitude</em> (cells broadly dampened), not polarization.</p>
+      <p style="margin-top:9px">That's what makes the Th1 arm a <b>two-sided internal control</b>: “Th1 not down” removes the global-dampening artifacts (the real dominant confound), “Th1 not up” removes the skewers. One 2-D decomposition was <em>meant</em> to isolate Th2-specific suppression — but see the Results section: under a clean matched Th1-vs-Th0 arm it doesn't survive. The 2-D framing is a good idea this particular data + metric can't support.</p>
+    </div>
+  </div>
+</div></section>
+
+<!-- ============ PERSONAL ============ -->
+<section id="personal"><div class="wrap">
+  <div class="sec-head"><span class="sec-num" style="color:var(--find)">◆</span><h2>Why this one is personal</h2></div>
+  <p class="sec-sub">You live on both ends of this exact axis — which is precisely why selectivity is the whole game, not a footnote.</p>
+  <div class="seesaw">
+    <div class="pole a">
+      <div class="lab">Th2 pole · turn DOWN</div>
+      <h4>Asthma</h4>
+      <div class="dis">allergic · IL-4 / IL-5 / IL-13</div>
+      <p>A textbook Th2-driven disease — the very program this project hunts to switch off. A <em>selective Th2 suppressor is, almost by definition, a candidate asthma target.</em> The drug dupilumab (which blocks IL-4/IL-13 signalling) already proves that quieting this axis treats allergic disease.</p>
+      <span class="role-tag">↓ the target</span>
+    </div>
+    <div class="fulcrum">the see-saw</div>
+    <div class="pole b">
+      <div class="lab">Th1 pole · must NOT trip</div>
+      <h4>Alopecia areata</h4>
+      <div class="dis">autoimmune · IFN-γ / Th1-type</div>
+      <p>Autoimmune hair loss driven largely by IFN-γ / Th1-type immunity — which is why JAK inhibitors (baricitinib, ritlecitinib) treat it. It sits on the <em>opposite pole.</em> A careless Th2 suppressor that shoves cells toward Th1 is exactly the direction you'd fear here.</p>
+      <span class="role-tag">↑ the guardrail</span>
+    </div>
+  </div>
+  <div class="insight-band">
+    <p>Your two conditions are the <strong>two ends of the see-saw this project has to balance.</strong> Asthma is the program we turn down; Th1-driven autoimmunity like alopecia is the direction we must not tip into. “Quiet the allergy without inflaming the other side” isn't an abstract constraint — it's your own immune system. You aren't just building the tool; you're the patient it's for.</p>
+    <p class="rc"><strong>Reality check, kept honest:</strong> this is <em>target discovery</em>, likely years from any therapy — and alopecia's biology is dominantly Th1/CD8, so here it's more the guardrail than the direct target. But asthma is a direct fit, and painstaking target-discovery exactly like this is how drugs such as dupilumab began.</p>
+  </div>
+</div></section>
+
+<!-- ============ 4. THE FILTER ============ -->
+<section id="filter"><div class="wrap">
+  <div class="sec-head"><span class="sec-num">04</span><h2>Turn the knobs, watch the finding fall out</h2></div>
+  <p class="sec-sub">Every slider is a real quality gate from the dataset. This <em>is</em> the analysis, made tangible.</p>
+
+  <p class="prose read" style="margin-bottom:20px">A credible candidate has to clear four gates at once: the knockdown truly happened, the Th2 effect is strong, the Th1 effect is near zero (selectivity), and it reproduces across the four donors. Drag the knobs — genes sort live into <em>rejected</em>, <em>known</em> (your calibration that the pipeline works), and <em>novel</em> (the actual finding).</p>
+
+  <div class="panel">
+    <div class="panel-cap"><span class="tag">Interactive · the pipeline as knobs</span><h3>Candidate filter</h3>
+      <span class="synthetic">synthetic values — teaches the method</span></div>
+    <div class="panel-body">
+      <div class="sliders">
+        <div class="sld"><label>Min Th2 suppression <b id="v0">0.45</b></label>
+          <input type="range" id="s0" min="0" max="0.9" step="0.05" value="0.45">
+          <div class="hint">How hard the knockdown must push the Th2 program <em>down</em>.</div></div>
+        <div class="sld"><label>Max Th1 change — selectivity <b id="v1">0.25</b></label>
+          <input type="range" id="s1" min="0.05" max="0.8" step="0.05" value="0.25">
+          <div class="hint">The wedge. Low = reject anything that flips cells toward Th1.</div></div>
+        <div class="sld"><label>Min knockdown efficiency <b id="v2">0.50</b></label>
+          <input type="range" id="s2" min="0" max="0.95" step="0.05" value="0.50">
+          <div class="hint"><span class="file">signif_knockdown</span> — did CRISPRi actually silence the gene?</div></div>
+        <div class="sld"><label>Min donor reproducibility <b id="v3">0.50</b></label>
+          <input type="range" id="s3" min="0" max="0.95" step="0.05" value="0.50">
+          <div class="hint">Consistent across all 4 donors, not one lucky replicate.</div></div>
+      </div>
+
+      <div class="buckets">
+        <div class="bucket"><div class="bucket-hd"><span class="t"><i style="background:var(--reject)"></i>Rejected</span><span class="c" id="cReject">0</span></div><div id="bReject"></div></div>
+        <div class="bucket"><div class="bucket-hd"><span class="t"><i style="background:var(--th2)"></i>Known · calibration</span><span class="c" id="cKnown">0</span></div><div id="bKnown"></div></div>
+        <div class="bucket bkt-find"><div class="bucket-hd"><span class="t"><i style="background:var(--find)"></i>Novel · the finding</span><span class="c" id="cNovel">0</span></div><div id="bNovel"></div></div>
+      </div>
+      <p class="hint" style="margin-top:14px">The <b>known</b> column is your built-in proof: if the pipeline reliably recovers established regulators like <span class="gene">GATA3</span> <span class="gene">STAT6</span> <span class="gene">IL4R</span>, the <b>novel</b> column earns trust. That recall number is your whole evaluation — most hackathon demos have none.</p>
+    </div>
+  </div>
+</div></section>
+
+<!-- ============ 5. PIPELINE ============ -->
+<section id="pipeline"><div class="wrap">
+  <div class="sec-head"><span class="sec-num">05</span><h2>How you actually build it in Claude Science</h2></div>
+  <p class="sec-sub">Claude Science = an AI workbench with a live Python kernel and reproducible artifacts. You drive it; it runs scanpy and shows its work.</p>
+  <div class="panel"><div class="panel-body">
+    <div class="pipe">
+      <div class="phase"><div class="pn">P0</div><div>
+        <h4>Load &amp; orient <span class="mono" style="color:var(--ink-3);font-size:.8rem">· today</span></h4>
+        <p>Pull only the pseudobulk + DE-stats objects (skip the 22M-cell raw matrix). Ask Claude Science to summarize the perturbations, conditions and donors.</p>
+        <div class="files"><span class="file">pseudobulk.h5ad</span><span class="file">DE_stats.h5ad</span></div></div></div>
+      <div class="phase"><div class="pn">P1</div><div>
+        <h4>Knockdown-QC gate</h4>
+        <p>Keep only perturbations that truly silenced their target. This alone removes ~half the genome and is where naive analyses quietly break.</p>
+        <div class="files"><span class="file">guide_kd_efficiency.suppl_table.csv → signif_knockdown</span><span class="file">ontarget_significant</span></div></div></div>
+      <div class="phase"><div class="pn">P2</div><div>
+        <h4>Two scores, not one</h4>
+        <p>Build <em>separate</em> Th2-up and Th1-up signatures (from the published DE signature + marker sets). Score every perturbation × condition, per donor. This is the step that breaks the paper's single axis into two.</p>
+        <div class="files"><span class="file">Th2_Th1_polarization_signature_…csv</span></div></div></div>
+      <div class="phase"><div class="pn">P3</div><div>
+        <h4>Selectivity + specificity filter</h4>
+        <p>Rank by (Th2 ↓ × donor reproducibility) with (Th1 ≈ 0). Kill nonspecific hits using the built-in activation-signature control, the K562 cross-cell-type control, and the core-essential gene list.</p>
+        <div class="files"><span class="file">activation signature (neg-control)</span><span class="file">K562_comparison.csv</span><span class="file">core_essentials_hart.tsv</span></div></div></div>
+      <div class="phase"><div class="pn">P4</div><div>
+        <h4>Mechanism + experiment <span class="mono" style="color:var(--accent);font-size:.8rem">· your edge</span></h4>
+        <p>For each surviving novel hit, build the mechanism <em>strongest-evidence-first</em>: the data's own <b>co-perturbation structure</b> (which knockdowns phenocopy this one) as the primary signal, a directed GRN for wiring, and Krogan's PPI only as corroboration. The agent assembles an evidence ledger — every claim tagged known / speculative / <b>observed-in-our-data</b> with a citation — runs a falsification pass, and proposes the single cheapest experiment that <em>discriminates</em> between competing mechanisms.</p>
+        <div class="files"><span class="file">co-perturbation graph</span><span class="file">directed GRN</span><span class="file">Krogan PPI (corroboration)</span><span class="file">discriminating-experiment optimizer</span></div></div></div>
+      <div class="phase"><div class="pn">P5</div><div>
+        <h4>Evaluate &amp; ship</h4>
+        <p>Report recall of the known-regulator list (calibration), the shortlist of selective novel suppressors (the finding), and hand it in as one reproducible Claude Science notebook.</p>
+        <div class="files"><span class="file">th1_th2_known_regulators.yaml → recall@k</span></div></div></div>
+    </div>
+  </div></div>
+</div></section>
+
+<!-- ============ 6. TEAM ============ -->
+<section id="team"><div class="wrap">
+  <div class="sec-head"><span class="sec-num">06</span><h2>Who does what</h2></div>
+  <p class="sec-sub">Max team size is 2. This split is the pitch to Haltavey — complementary, not overlapping.</p>
+  <div class="split">
+    <div class="who you"><h4>You</h4><div class="role">agents · systems · rigor</div>
+      <ul><li>The QC + selectivity + <b>target-triage</b> scoring (real vs false positive)</li><li>Co-perturbation-coherence + donor-reproducibility hardening of the 172</li><li>The mechanism-card layer (co-perturbation → ledger → experiment)</li><li>The discriminating-experiment optimizer</li><li>The reproducible Claude Science pipeline + write-up</li></ul></div>
+    <div class="who bio"><h4>Haltavey</h4><div class="role">T-cell immunology · <b>published on E3 ligases in Th2</b></div>
+      <ul><li>Already ran the validating two-arm analysis (172 hits, r +0.49)</li><li>Defining &amp; validating the Th2 / Th1 signatures</li><li>Judging which novel hits are plausible <em>and druggable</em></li><li>E3-ligase / target-class expertise (a Nat Comms paper on it)</li><li>Framing the disease story; keeping the science honest</li></ul></div>
+  </div>
+</div></section>
+
+<!-- ============ 7. RISK LEDGER ============ -->
+<section id="risk"><div class="wrap">
+  <div class="sec-head"><span class="sec-num">07</span><h2>Honest risk ledger</h2></div>
+  <p class="sec-sub">What could sink this, and the mitigation for each. Naming them is half the defense.</p>
+  <div class="ledger">
+    <div class="risk"><div><div class="r-t"><span class="sev hi">high</span>Overlap with the paper</div></div>
+      <p>Their bidirectional axis already ranks Th2/Th1 regulators. <span class="fix">Mitigation: never present an atlas — present the <em>decoupled selective</em> subset their axis conflates, with a diff against their published CSV.</span></p></div>
+    <div class="risk"><div><div class="r-t"><span class="sev hi">high</span>Global dampening — the confirmed dominant confound</div></div>
+      <p>Real data shows the arms correlate r ≈ +0.49: the biggest signal is cells getting broadly dampened, which drags the Th2 score down artifactually. <span class="fix">Mitigation (now built in): the Th1 arm as a two-sided control kills it — “Th1 not down” removes dampeners — plus core-essential + knockdown-QC gates.</span></p></div>
+    <div class="risk"><div><div class="r-t"><span class="sev md">med</span>Novel hits have no literature to lean on</div></div>
+      <p>Most hits aren't classic Th2 genes (expected for a genome-scale screen) — but novelty removes external corroboration. <span class="fix">Mitigation: novel hits held to a higher internal-evidence bar — co-perturbation coherence with GATA3/STAT6 + donor reproducibility carry the proof. See §11③.</span></p></div>
+    <div class="risk"><div><div class="r-t"><span class="sev md">med</span>Failed knockdowns pollute the ranking</div></div>
+      <p>CRISPRi silences only ~40–50% of targets. <span class="fix">Mitigation: hard <span class="mono">signif_knockdown</span> gate before any ranking (Phase 1).</span></p></div>
+    <div class="risk"><div><div class="r-t"><span class="sev md">med</span>Th2 signal is weak at Rest</div></div>
+      <p>The program barely exists in unstimulated cells, so “context-dependence” can be an artifact of the program only turning on when stimulated. <span class="fix">Mitigation: interpret Rest vs Stim carefully; anchor claims in the 8 h / 48 h conditions.</span></p></div>
+    <div class="risk"><div><div class="r-t"><span class="sev md">med</span>Mechanism layer hallucinates</div></div>
+      <p>The agent could invent a plausible-sounding path. <span class="fix">Mitigation: every edge checked against a structured source, tagged known vs speculative, with a citation — the ledger is the defense.</span></p></div>
+    <div class="risk"><div><div class="r-t"><span class="sev hi">high</span>PPI path-tracing is easy to undercut</div></div>
+      <p>GATA3 is a hub — a short PPI path to it exists from almost any gene (study-bias artifact), and PPI edges are undirected + ~80% incomplete. <span class="fix">Mitigation: co-perturbation structure is primary evidence; PPI is corroboration only, used via propagation not shortest-path. See §08.</span></p></div>
+  </div>
+</div></section>
+
+<!-- ============ 8. PRIOR ART ============ -->
+<section id="priorart"><div class="wrap">
+  <div class="sec-head"><span class="sec-num">08</span><h2>Does this already exist? — the lasting wedge</h2></div>
+  <p class="sec-sub">Checked against the 2026 literature. The full loop isn't built — but every piece is, so the novelty has to be surgical.</p>
+  <div class="read stack">
+    <div class="callout win">
+      <h3>◆ Two genuinely-open pieces — bet the project on these</h3>
+      <p><b>1 · The cheapest <em>discriminating</em> experiment.</b> Everyone else (BioDiscoveryAgent, PerTurboAgent, Robin) proposes <em>batches</em> to <em>maximize discovery</em> — the opposite goal. Nobody optimizes the one minimal-cost experiment that separates two competing mechanisms.</p>
+      <p style="margin-top:9px"><b>2 · The “observed-in-our-data” tag.</b> Fusing the literature/DB evidence ledger with <em>your own</em> Perturb-seq observation as a first-class known / speculative / <b>observed</b> label. Existing ledgers (INDRA) carry belief scores but no such tag.</p>
+    </div>
+    <p class="prose">Everything else is built — <b>INDRA</b> (typed-claim ledger + signed causal path-finding), <b>POPPER</b> (falsification), <b>PaperQA2 / ContraCrow</b> (literature + contradiction), <b>GeneAgent</b> (claim-checking). So <strong>compose these, don't rebuild them</strong>, and don't pitch “an agent that generates hypotheses” — informed judges read that as plumbing. Honest note: the “evidence-ledger + typed epistemic claims” idea is already published — in <em>chemistry</em> (npj AI 2026) — so frame it as <strong>porting a proven pattern to Perturb-seq biology</strong>, not inventing it.</p>
+    <div class="callout warn">
+      <h3>⚠ Competitive risk to name out loud</h3>
+      <p>Stanford's SNAP/Zou lab (BioDiscoveryAgent, Biomni, POPPER, GEARS) and the Gyori lab (INDRA, EMMAA) each already own most of the parts and could ship this in a sprint. Your defensibility is the <em>specific framing</em> — Perturb-seq hit → cheapest discriminating experiment, with an observed-in-data ledger — not the underlying tech.</p>
+    </div>
+  </div>
+  <div class="srcs" style="margin-top:20px">
+    <span>durable refs · Cowen 2017 (network propagation) · Replogle 2022 (co-perturbation recovers complexes, r=0.61) · Norman 2019 (epistasis) · BEELINE (GRN benchmark) · CausalBench (graph inference ≯ baselines) · Ahlmann-Eltze 2025 (deep ≯ linear) · Nat Rev Genet 2026 review · INDRA · POPPER</span>
+  </div>
+</div></section>
+
+<!-- ============ 9. MESSAGE ============ -->
+<section id="message"><div class="wrap">
+  <div class="sec-head"><span class="sec-num">09</span><h2>Do now — the message to Haltavey</h2></div>
+  <p class="sec-sub">Paste-ready. Signals you did the homework without overselling the biology.</p>
+  <div class="read">
+    <div class="copyblock">Yeah I really like the Th2 direction — spent a while digging through the paper + their analysis repo before replying to sanity-check it.
+
+One thing that jumped out: they already publish a confidence-ranked atlas of Th2/Th1 regulators across Rest/8hr/48hr (a coefficients table in their supplement, basically Fig 4). So a straight "genome-wide Th2 atlas" risks looking like a re-run of their own figure, which feels a bit sketchy given Gladstone/Marson are judging 😅
+
+But there might be a real crack in it: their Th2-vs-Th1 score is a single bidirectional axis, so it can't separate "this knockdown *selectively* suppresses Th2" from "this one just flips the cell toward Th1." Those feel pretty different biologically? (correct me — you'd know way better.) For something like allergy you'd want the first and specifically *not* the second. So the angle I'm into is hunting **selective Th2 suppressors** — knockdowns that drop the Th2 markers without pushing the Th1 ones up.
+
+I'm way more confident on the engineering/pipeline side than the biology, so I'd lean on you a lot and might be framing bits clumsily. Rough split: I own the pipeline, the QC + selectivity metric, and a mechanism/experiment layer; you drive the Th2 biology and gut-check which hits are actually plausible. Keeping your known/novel bucket idea too — it's a clean built-in calibration. Does that resonate?<span class="opt"><b>Optional personal line to add:</b> “honestly a bit personal too — I've got asthma + alopecia, so ‘calm the allergy side without inflaming the other’ is something I actually care about.”</span></div>
+  </div>
+</div></section>
+
+<!-- ============ 10. STARTER CODE ============ -->
+<section id="code"><div class="wrap">
+  <div class="sec-head"><span class="sec-num">10</span><h2>Run first — the Phase 0–1 starter</h2></div>
+  <p class="sec-sub">The one check that de-risks everything: do selective Th2 suppressors actually exist in the data? Paste into Claude Science's kernel; adapt names after inspecting.</p>
+  <div class="codewrap">
+    <div class="bar"><span class="dt"></span>selective_th2.py · Claude Science / scanpy</div>
+<pre><em># ============================================================
+#  Phase 0-1 starter · selective Th2-suppressor discovery
+#  Marson genome-scale CD4+ T-cell Perturb-seq  (CZI VCP)
+#  Paste into Claude Science's kernel; adapt names after inspecting.
+# ============================================================</em>
+import scanpy as sc, pandas as pd, numpy as np, yaml
+import matplotlib.pyplot as plt
+BASE = "data/"          <em># your download path</em>
+
+<b># ---- STEP 0 · get the data (once, in a terminal) -----------</b>
+<em>#  aws s3 ls --no-sign-request s3://genome-scale-tcell-perturb-seq/marson2025_data/
+#  need: DE_stats.h5ad, guide_kd_efficiency.suppl_table.csv,
+#        Th2_Th1_polarization_signature_DE_results_full.suppl_table.csv,
+#        th1_th2_known_regulators.yaml, core_essentials_hart.tsv</em>
+
+<b># ---- STEP 1 · load DE stats (one row per perturbation x condition)</b>
+de = sc.read_h5ad(BASE + "GWCD4i.DE_stats.h5ad")
+print(de); print(de.obs.columns.tolist())     <em># INSPECT — names below may differ
+#  .X (or a layer) = per-gene DE z-score for that perturbation</em>
+
+<b># ---- STEP 2 · build the DECOUPLED Th2 and Th1 gene sets -----</b>
+sig = pd.read_csv(BASE + "Th2_Th1_polarization_signature_DE_results_full.suppl_table.csv")
+sig = sig.dropna(subset=["zscore"])            <em># +zscore = Th2-associated, - = Th1-associated</em>
+present = set(de.var_names); TOPN = 50
+th2_genes = [g for g in sig.sort_values("zscore", ascending=False)["gene"] if g in present][:TOPN]
+th1_genes = [g for g in sig.sort_values("zscore", ascending=True )["gene"] if g in present][:TOPN]
+
+<b># ---- STEP 3 · score every perturbation on BOTH programs -----</b>
+<em>#  effect = mean DE z-score across the program's genes.
+#  th2_effect &lt; 0  =&gt;  the knockdown SUPPRESSES Th2 (what we want)</em>
+th2 = de[:, th2_genes].to_df().mean(axis=1)
+th1 = de[:, th1_genes].to_df().mean(axis=1)
+res = de.obs.copy(); res["th2_effect"] = th2.values; res["th1_effect"] = th1.values
+
+<b># ---- STEP 4 · quality gates (drop untrustworthy rows) -------</b>
+ess = set(pd.read_csv(BASE + "core_essentials_hart.tsv", sep="\t", header=None)[0])
+res = res[res["ontarget_significant"] == True]     <em># the knockdown had a real effect</em>
+res = res[res["offtarget_flag"] == False]          <em># no off-target contamination</em>
+res = res[~res["target"].isin(ess)]                <em># not core-essential (viability)</em>
+<em>#  also require signif_knockdown by merging guide_kd_efficiency on target+condition</em>
+
+<b># ---- STEP 5 · the SELECTIVITY metric (the wedge) -----------</b>
+MIN_SUPPRESSION, MAX_TH1 = 0.40, 0.25
+res["selective"] = (res.th2_effect &lt;= -MIN_SUPPRESSION) &amp; (res.th1_effect.abs() &lt;= MAX_TH1)
+res["score"] = (-res.th2_effect) - res.th1_effect.abs()      <em># reward Th2 down, punish Th1 move</em>
+
+<b># ---- STEP 6 · known (calibration) vs novel (the finding) ---</b>
+known = set(yaml.safe_load(open(BASE + "th1_th2_known_regulators.yaml"))["th2"])
+sel = res[res.selective].sort_values("score", ascending=False)
+sel["bucket"] = np.where(sel["target"].isin(known), "known", "novel")
+recall = sel[sel.bucket == "known"]["target"].nunique() / len(known)
+print(f"selective hits: {len(sel)}  |  known regulators recovered: {recall:.0%}")
+print(sel[["target","culture_condition","th2_effect","th1_effect","bucket"]].head(30))
+
+<b># ---- STEP 7 · the real selectivity plane (the payoff) ------</b>
+plt.scatter(res.th1_effect, res.th2_effect, s=6, alpha=.3)
+plt.axhline(-MIN_SUPPRESSION, ls="--"); plt.axvline(0)
+plt.xlabel("Th1 effect"); plt.ylabel("Th2 effect  (down = suppressed)")
+<em>#  &gt;&gt;&gt; is the bottom-centre zone populated (selective suppressors exist),
+#      or is it all a diagonal (Th2-down coupled to Th1-up)?  Either is a result.</em></pre>
+  </div>
+  <div class="aha" style="margin-top:14px">The payoff is STEP 7: if the bottom-centre zone is populated, selective suppressors exist — that's your finding. If everything falls on a diagonal (Th2-down always drags Th1 up), the finding flips to “Th2 suppression is intrinsically coupled to Th1 gain in CD4 T cells.” <b>Both are real, defensible results</b> — which is how you know the question is well-posed.</div>
+</div></section>
+
+<!-- ============ 11. BUILD KIT ============ -->
+<section id="build"><div class="wrap">
+  <div class="sec-head"><span class="sec-num">11</span><h2>Build-ready — the two novel pieces</h2></div>
+  <p class="sec-sub">The parts that make this defensible rather than plumbing. Everything else you compose from INDRA / POPPER / PaperQA2.</p>
+
+  <h3 class="subh">① The mechanism card + evidence ledger</h3>
+  <div class="codewrap">
+    <div class="bar"><span class="dt"></span>mechanism_card.json · one per hit</div>
+<pre>{
+  "hit": { "gene": "C-114", "condition": "Stim48hr",
+           "th2_effect": -0.79, "th1_effect": 0.03,
+           "kd_efficiency": 0.74, "donor_reproducibility": 0.85,
+           "known_regulator": false },
+  "hypothesis": "C-114 sustains GATA3 induction; its knockdown collapses
+                 IL4/IL5/IL13 without engaging the Th1 / T-bet axis.",
+  "claims": [
+    { "id": 1, "statement": "C-114 knockdown phenocopies GATA3 knockdown",
+      "evidence": "co-perturbation r=0.71 vs the GATA3 signature",
+      "source": "DE_stats.h5ad (this study)", "confidence": 0.90,
+      "tag": <b>"observed"</b> },                 <em># &lt;- the novel piece #2</em>
+    { "id": 2, "statement": "C-114 co-occurs with NuRD subunits (CHD4/MTA2)",
+      "evidence": "physical complex membership",
+      "source": "CORUM:123 / Krogan map", "confidence": 0.60,
+      "tag": "known" },
+    { "id": 3, "statement": "C-114 directly represses the IL4 locus",
+      "evidence": "none found",
+      "source": null, "confidence": 0.25,
+      "tag": <b>"speculative"</b> }               <em># &lt;- what the experiment must test</em>
+  ],
+  "counter_evidence": [
+    { "claim_id": 2, "statement": "NuRD reported GATA3-independent in Tregs",
+      "source": "PMID:XXXXXXXX" }                <em># from the falsification pass</em>
+  ],
+  "discriminating_experiment": "GATA3-OE rescue after C-114 knockdown",
+  "overall_confidence": 0.62
+}</pre>
+  </div>
+
+  <h3 class="subh" style="margin-top:26px">② The cheapest-discriminating-experiment optimizer</h3>
+  <p class="prose read" style="margin-bottom:14px">Given a hit with two competing mechanisms, score every feasible assay by <em>how differently the two hypotheses predict its readout, per unit cost</em> — return the winner. Nobody else does this; everyone else proposes batches to maximize discovery.</p>
+  <div class="codewrap" style="margin-bottom:18px">
+    <div class="bar"><span class="dt"></span>discriminate.py · pseudocode</div>
+<pre><em># two competing mechanistic hypotheses for one hit</em>
+H1 = "acts through GATA3"       <em># predicts: GATA3 protein down; rescue restores IL4/5/13</em>
+H2 = "acts parallel to GATA3"   <em># predicts: GATA3 protein flat; rescue does nothing</em>
+
+best = None
+for e in ASSAY_LIBRARY:                     <em># each assay e has a cost and a readout</em>
+    p1 = predict_readout(e, H1)             <em># distribution H1 expects</em>
+    p2 = predict_readout(e, H2)             <em># distribution H2 expects</em>
+    discrimination = divergence(p1, p2)     <em># how differently they predict e</em>
+    score = discrimination / e.cost         <em># cheap AND separating</em>
+    best = keep_max(best, e, score)
+
+return best   <em># the single cheapest experiment that splits H1 from H2</em></pre>
+  </div>
+  <p class="prose read" style="margin-bottom:12px">Worked example — the hit's competing hypotheses <b>H1</b> “acts through GATA3” vs <b>H2</b> “acts parallel to GATA3”:</p>
+  <div class="tblwrap"><table class="assay">
+    <thead><tr><th>Assay</th><th>Cost</th><th>Reads out</th><th>Splits&nbsp;H1&nbsp;/&nbsp;H2?</th></tr></thead>
+    <tbody>
+      <tr class="win"><td>GATA3-overexpression rescue after KD <span class="win-badge">← winner</span></td><td><span class="cost md">med</span></td><td>are IL4/5/13 restored?</td><td>strongly — H1 yes, H2 no</td></tr>
+      <tr><td>GATA3 intracellular stain after KD</td><td><span class="cost lo">low</span></td><td>GATA3 protein level</td><td>yes — H1 ↓, H2 flat</td></tr>
+      <tr><td>X × GATA3 double perturbation</td><td><span class="cost hi">high</span></td><td>epistasis / pathway order</td><td>yes, but costly</td></tr>
+      <tr><td>ChIP / ATAC at the IL4 locus</td><td><span class="cost hi">high</span></td><td>direct binding</td><td>partial</td></tr>
+      <tr><td>IL4/IL5/IL13 secretome</td><td><span class="cost lo">low</span></td><td>program output</td><td>no — both predict ↓</td></tr>
+    </tbody>
+  </table></div>
+  <p class="hint" style="margin-top:12px">The optimizer picks the <b>GATA3 stain</b> or <b>OE-rescue</b> (high discrimination ÷ low–med cost), not the expensive double-perturbation and not the secretome (which can't tell the hypotheses apart). That per-hit choice is the crown jewel.</p>
+
+  <h3 class="subh" style="margin-top:28px">③ Target triage — real vs false positive <span class="mono" style="color:var(--th1);font-size:.8rem">· Haltavey's ask</span></h3>
+  <p class="prose read" style="margin-bottom:14px">Score every candidate on <em>two independent axes</em> — don't fold “is it real?” and “is it exciting?” into one number. Fast triage over all 172 <em>before</em> the deep mechanism cards.</p>
+  <div class="tblwrap"><table class="assay">
+    <thead><tr><th>Feature</th><th>Axis</th><th>Catches / means</th></tr></thead>
+    <tbody>
+      <tr><td>signif_knockdown = True</td><td><span class="cost hi">validity gate</span></td><td>failed knockdowns</td></tr>
+      <tr><td>not core-essential · offtarget = False</td><td><span class="cost hi">validity gate</span></td><td>viability &amp; off-target FPs</td></tr>
+      <tr><td>Th2 effect size · Th1-flatness</td><td><span class="cost md">validity</span></td><td>weak hits · skewers · dampeners</td></tr>
+      <tr><td>donor reproducibility (4 donors)</td><td><span class="cost md">validity</span></td><td>noise / one-donor flukes</td></tr>
+      <tr class="win"><td>co-perturbation coherence vs GATA3/STAT6/IL4R <span class="win-badge">← key</span></td><td><span class="cost md">validity</span></td><td>random dampener vs real Th2-module member — needs no literature</td></tr>
+      <tr><td>Th2 literature prior (low = novel)</td><td><span class="cost lo">novelty</span></td><td>the finding vs the textbook</td></tr>
+      <tr><td>druggable class (E3 ligase / kinase / receptor)</td><td><span class="cost lo">druggability</span></td><td>translational value — E3s are gold</td></tr>
+    </tbody>
+  </table></div>
+  <p class="hint" style="margin-top:12px"><b>Shortlist = high validity ∩ (novel + druggable), with novel hits held to a higher validity bar.</b> Co-perturbation coherence is the strongest real-vs-false discriminator — interventional, internal, and literature-free, exactly what a novel hit requires. An E3-ligase hit clears the druggability axis outright.</p>
+</div></section>
+
+<footer><div class="wrap read">
+  <p><strong style="color:var(--ink)">Deliverable.</strong> One reproducible Claude Science notebook → a short list of <em>selective</em> Th2 suppressors (Th2 ↓, Th1 flat), each with a network-traced mechanism and a proposed experiment, plus a recall number proving the pipeline recovers known regulators. Framed as candidate targets for allergic disease.</p>
+  <div class="srcs">
+    <span>data · CZI Virtual Cells — genome-scale T-cell Perturb-seq (Marson / Pritchard 2025)</span>
+    <span>code · github.com/emdann/GWT_perturbseq_analysis_2025</span>
+    <span>networks · kroganlab.ucsf.edu/network-maps</span>
+    <span>tool · Claude Science · claude.com/product/claude-science</span>
+    <span style="color:var(--ink-3)">note · every number in the two widgets is synthetic, chosen to teach the method — not real results.</span>
+  </div>
+</div></footer>
+
+<script>
+(function(){
+  "use strict";
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion:reduce)").matches;
+
+  /* ---------- theme toggle ---------- */
+  var btn = document.getElementById("themeBtn");
+  btn.addEventListener("click", function(){
+    var cur = document.documentElement.getAttribute("data-theme");
+    if(!cur){ cur = window.matchMedia("(prefers-color-scheme:dark)").matches ? "dark":"light"; }
+    var next = cur==="dark" ? "light":"dark";
+    document.documentElement.setAttribute("data-theme", next);
+    if(window.__redrawPlane) window.__redrawPlane();
+  });
+
+  /* ---------- fate explorer ---------- */
+  var FATES = {
+    th2:{tf:"GATA3", nm:"Th2 helper", role:"Drives allergic responses and fights parasites. This is the program we want to selectively switch off.", cy:["IL-4","IL-5","IL-13"], col:"var(--th2)"},
+    th1:{tf:"T-bet", nm:"Th1 helper", role:"Fights viruses and tumors; inflammatory. We must NOT accidentally flip cells here.", cy:["IFN-γ","TNF"], col:"var(--th1)"},
+    th17:{tf:"RORγt", nm:"Th17 helper", role:"Fights fungi; drives autoimmunity when dysregulated.", cy:["IL-17","IL-22"], col:"#7A57C9"},
+    treg:{tf:"FOXP3", nm:"Regulatory T", role:"Suppresses immune responses and maintains tolerance — the brakes.", cy:["IL-10","TGF-β"], col:"#3E8E4E"}
+  };
+  var fd = document.getElementById("fateDetail");
+  function showFate(k){
+    var f = FATES[k];
+    fd.innerHTML = '<div style="font-family:var(--mono);font-weight:700;color:'+f.col+'">'+f.tf+
+      ' <span style="color:var(--ink-3);font-weight:400">— master switch of '+f.nm+'</span></div>'+
+      '<div style="font-size:.9rem;color:var(--ink-2);margin-top:6px">'+f.role+'</div>'+
+      '<div class="row"><span style="font-size:.74rem;color:var(--ink-3);align-self:center">secretes</span>'+
+      f.cy.map(function(c){return '<span class="cyto">'+c+'</span>';}).join('')+'</div>';
+  }
+  var fbtns = document.querySelectorAll(".fate");
+  fbtns.forEach(function(b){
+    b.addEventListener("click", function(){
+      fbtns.forEach(function(x){x.setAttribute("aria-pressed","false");});
+      b.setAttribute("aria-pressed","true");
+      showFate(b.dataset.f);
+    });
+  });
+  showFate("th2");
+
+  /* ---------- shared gene dataset (synthetic, teaching) ----------
+     th1 = effect on Th1 program (x), th2 = effect on Th2 program (y, negative = suppressed)
+     kd = knockdown efficiency, rep = donor reproducibility, ess = essential, known = known Th2 reg */
+  var GENES = [
+    {sym:"GATA3",  th1:-0.05, th2:-0.86, kd:0.82, rep:0.90, ess:false, known:true },
+    {sym:"STAT6",  th1:-0.02, th2:-0.74, kd:0.71, rep:0.83, ess:false, known:true },
+    {sym:"IL4R",   th1:0.04,  th2:-0.68, kd:0.66, rep:0.79, ess:false, known:true },
+    {sym:"SETDB1", th1:0.08,  th2:-0.52, kd:0.58, rep:0.71, ess:false, known:true },
+    {sym:"ICOS",   th1:-0.10, th2:-0.44, kd:0.61, rep:0.66, ess:false, known:true },
+    {sym:"C-114",  th1:0.03,  th2:-0.79, kd:0.74, rep:0.85, ess:false, known:false},
+    {sym:"C-131",  th1:-0.06, th2:-0.63, kd:0.69, rep:0.77, ess:false, known:false},
+    {sym:"C-146",  th1:0.11,  th2:-0.57, kd:0.55, rep:0.72, ess:false, known:false},
+    {sym:"C-158",  th1:-0.09, th2:-0.49, kd:0.63, rep:0.68, ess:false, known:false},
+    {sym:"C-203",  th1:0.52,  th2:-0.61, kd:0.70, rep:0.80, ess:false, known:false}, /* flipper */
+    {sym:"C-217",  th1:0.44,  th2:-0.47, kd:0.64, rep:0.74, ess:false, known:false}, /* flipper */
+    {sym:"C-229",  th1:0.38,  th2:-0.40, kd:0.59, rep:0.62, ess:false, known:false}, /* flipper */
+    {sym:"C-305",  th1:-0.34, th2:-0.70, kd:0.77, rep:0.55, ess:true,  known:false}, /* essential/nonspecific */
+    {sym:"C-318",  th1:-0.41, th2:-0.55, kd:0.72, rep:0.48, ess:true,  known:false},
+    {sym:"C-402",  th1:0.02,  th2:-0.24, kd:0.28, rep:0.40, ess:false, known:false}, /* failed KD */
+    {sym:"C-419",  th1:0.06,  th2:-0.12, kd:0.44, rep:0.35, ess:false, known:false}, /* weak */
+    {sym:"TBX21",  th1:-0.58, th2:0.30,  kd:0.68, rep:0.70, ess:false, known:false}  /* KD raises Th2 */
+  ];
+
+  /* ---------- selectivity plane (canvas) ---------- */
+  var cv = document.getElementById("plane"), ctx = cv.getContext("2d");
+  var tip = document.getElementById("tip");
+  var aha = document.getElementById("ahaText");
+  var toggle = document.getElementById("axisToggle");
+  var animT = 0, targetT = 0, raf = null;
+  var pts = []; // screen coords cache
+
+  function cssVar(n){ return getComputedStyle(document.documentElement).getPropertyValue(n).trim(); }
+  function colFor(g){
+    if(g.ess || g.kd<0.5) return cssVar("--reject");
+    if(g.th1 > 0.28) return cssVar("--th1");        // flips to Th1
+    if(g.known) return cssVar("--th2");
+    if(g.th2 <= -0.4 && Math.abs(g.th1)<=0.28) return cssVar("--find"); // selective novel
+    return cssVar("--reject");
+  }
+
+  function resize(){
+    var w = cv.parentElement.clientWidth;
+    var h = Math.max(340, Math.min(500, w*0.74));
+    var dpr = window.devicePixelRatio||1;
+    cv.style.height = h+"px";
+    cv.width = w*dpr; cv.height = h*dpr;
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    cv._w = w; cv._h = h;
+    draw();
+  }
+
+  function X(v,w,pad){ return pad + (v+0.7)/(1.4)*(w-2*pad); }   // th1 in [-0.7,0.7]
+  function Y(v,h,pad){ return pad + (0.5-v)/(1.0)*(h-2*pad); }    // th2 in [-0.5,... ] up=+0.5
+
+  function draw(){
+    var w=cv._w, h=cv._h, pad=44;
+    ctx.clearRect(0,0,w,h);
+    var ink3=cssVar("--ink-3"), border=cssVar("--border"), ink2=cssVar("--ink-2");
+    var th1c=cssVar("--th1"), th2c=cssVar("--th2"), findc=cssVar("--find"), acc=cssVar("--accent");
+    var x0=X(0,w,pad), y0=Y(0,h,pad);
+
+    // target band (selective suppressor zone): th2 low, |th1| small
+    ctx.fillStyle = hexA(findc,0.08);
+    var bx1=X(-0.28,w,pad), bx2=X(0.28,w,pad), by1=Y(-0.4,h,pad), by2=Y(-1.0,h,pad);
+    ctx.fillRect(bx1, by1, bx2-bx1, (h-pad)-by1);
+    ctx.font='600 9px '+cssVar("--sans"); ctx.fillStyle=hexA(findc,0.95); ctx.textAlign="center";
+    ctx.fillText("the asthma target", (bx1+bx2)/2, (h-pad)-7);
+
+    // grid + axes
+    ctx.strokeStyle=border; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(pad,y0); ctx.lineTo(w-pad,y0); ctx.moveTo(x0,pad); ctx.lineTo(x0,h-pad); ctx.stroke();
+
+    // axis labels
+    ctx.font='600 11px '+cssVar("--mono");
+    ctx.fillStyle=th1c; ctx.textAlign="right"; ctx.fillText("Th1 UP →", w-pad, y0-8);
+    ctx.textAlign="left"; ctx.fillText("← Th1 DOWN", pad, y0-8);
+    ctx.fillStyle=th2c; ctx.textAlign="left"; ctx.save();
+    ctx.translate(x0+7, pad+2); ctx.fillText("Th2 UP ↑", 0,0); ctx.restore();
+    ctx.save(); ctx.translate(x0+7, h-pad-2); ctx.fillText("Th2 DOWN ↓ (goal)",0,0); ctx.restore();
+
+    // paper's 1D axis (y=-x through origin), fades in with animT
+    if(animT>0.01){
+      ctx.strokeStyle=hexA(acc, 0.55*animT); ctx.lineWidth=2; ctx.setLineDash([6,5]);
+      var ax=0.62;
+      ctx.beginPath();
+      ctx.moveTo(X(-ax,w,pad), Y(ax,h,pad));   // top-left (more Th2/less Th1)
+      ctx.lineTo(X(ax,w,pad),  Y(-ax,h,pad));  // bottom-right (more Th1/less Th2)
+      ctx.stroke(); ctx.setLineDash([]);
+      ctx.font='600 10px '+cssVar("--mono"); ctx.fillStyle=hexA(acc,animT);
+      ctx.textAlign="left"; ctx.fillText("paper's 1-D axis", X(-ax,w,pad)+4, Y(ax,h,pad)-6);
+    }
+
+    // points (interpolate toward foot on y=-x when collapsing)
+    pts.length=0;
+    GENES.forEach(function(g){
+      var t = (g.th1 - g.th2)/2;            // foot param
+      var fx = t, fy = -t;                   // foot coords in data space
+      var dx = g.th1 + (fx-g.th1)*animT;
+      var dy = g.th2 + (fy-g.th2)*animT;
+      var sx = X(dx,w,pad), sy=Y(dy,h,pad);
+      var c = colFor(g);
+      var r = (c===findc)?7:5.5;
+      // connector line while collapsing
+      if(animT>0.01 && animT<0.99){
+        ctx.strokeStyle=hexA(c,0.28); ctx.lineWidth=1;
+        ctx.beginPath(); ctx.moveTo(X(g.th1,w,pad),Y(g.th2,h,pad)); ctx.lineTo(sx,sy); ctx.stroke();
+      }
+      ctx.beginPath(); ctx.arc(sx,sy,r,0,7); ctx.fillStyle=c; ctx.fill();
+      if(c===findc){ ctx.strokeStyle=cssVar("--surface"); ctx.lineWidth=1.5; ctx.stroke(); }
+      // label the two teaching genes
+      if(g.sym==="C-114"||g.sym==="C-203"){
+        ctx.font='700 10px '+cssVar("--mono"); ctx.fillStyle=ink2; ctx.textAlign="left";
+        ctx.fillText(g.sym==="C-114"?"selective ↓":"flipper", sx+9, sy+3);
+      }
+      pts.push({x:sx,y:sy,r:r+3,g:g,c:c});
+    });
+  }
+  window.__redrawPlane = draw;
+
+  function hexA(v,a){
+    v=v.trim();
+    if(v[0]==="#"){var n=parseInt(v.slice(1),16),r=(n>>16)&255,g=(n>>8)&255,b=n&255;
+      return "rgba("+r+","+g+","+b+","+a+")";}
+    // rgb()/other -> just return with reduced alpha fallback
+    return v;
+  }
+
+  function animate(){
+    var d = targetT - animT;
+    if(Math.abs(d)<0.01){ animT=targetT; draw(); raf=null; return; }
+    animT += d*0.18; draw(); raf=requestAnimationFrame(animate);
+  }
+  toggle.addEventListener("change", function(){
+    targetT = toggle.checked?1:0;
+    aha.innerHTML = toggle.checked
+      ? "See it? The <b style='color:var(--find)'>selective suppressor</b> and the <b style='color:var(--th1)'>Th1 flipper</b> land on the <b>exact same spot</b> on the 1-D axis — same score, opposite biology. That collapse is what the paper can't undo, and what our 2-D view recovers."
+      : "Each dot is a gene knockdown. <b>Down</b> = Th2 suppressed (good — calmer asthma/allergy). <b>Right</b> = Th1 activated (bad — the pole where Th1-driven autoimmunity like alopecia lives). The <b style='color:var(--find)'>gold band</b> is the prize: strong Th2 suppression with Th1 left untouched. Flip the toggle to see the paper's blind spot.";
+    if(reduce){ animT=targetT; draw(); } else { if(!raf) raf=requestAnimationFrame(animate); }
+  });
+  aha.innerHTML = "Each dot is a gene knockdown. <b>Down</b> = Th2 suppressed (good — calmer asthma/allergy). <b>Right</b> = Th1 activated (bad — the pole where Th1-driven autoimmunity like alopecia lives). The <b style='color:var(--find)'>gold band</b> is the prize: strong Th2 suppression with Th1 left untouched. Flip the toggle to see the paper's blind spot.";
+
+  // hover tooltip
+  cv.addEventListener("mousemove", function(e){
+    var rect=cv.getBoundingClientRect();
+    var mx=e.clientX-rect.left, my=e.clientY-rect.top, hit=null;
+    for(var i=0;i<pts.length;i++){ var p=pts[i];
+      if((mx-p.x)*(mx-p.x)+(my-p.y)*(my-p.y) < p.r*p.r){ hit=p; break; } }
+    if(hit){
+      var g=hit.g;
+      tip.style.left=hit.x+"px"; tip.style.top=hit.y+"px"; tip.style.opacity=1;
+      tip.innerHTML="<b>"+g.sym+"</b>"+(g.known?" · known":"")+
+        "<br>Th2 "+(g.th2<0?"↓":"↑")+Math.abs(g.th2).toFixed(2)+
+        " · Th1 "+(g.th1<0?"↓":"↑")+Math.abs(g.th1).toFixed(2)+
+        "<br>KD "+g.kd.toFixed(2)+" · donors "+g.rep.toFixed(2);
+    } else tip.style.opacity=0;
+  });
+  cv.addEventListener("mouseleave", function(){ tip.style.opacity=0; });
+
+  window.addEventListener("resize", resize);
+  resize();
+
+  /* ---------- candidate filter ---------- */
+  var S=[document.getElementById("s0"),document.getElementById("s1"),
+         document.getElementById("s2"),document.getElementById("s3")];
+  var V=[document.getElementById("v0"),document.getElementById("v1"),
+         document.getElementById("v2"),document.getElementById("v3")];
+  var col = { reject:document.getElementById("bReject"), known:document.getElementById("bKnown"),
+              novel:document.getElementById("bNovel") };
+  var cnt = { reject:document.getElementById("cReject"), known:document.getElementById("cKnown"),
+              novel:document.getElementById("cNovel") };
+
+  function classify(g, minSup, maxTh1, minKd, minRep){
+    if(g.kd < minKd)               return {b:"reject", why:"knockdown failed"};
+    if(g.ess)                      return {b:"reject", why:"essential / nonspecific"};
+    if(-g.th2 < minSup)            return {b:"reject", why:"weak Th2 effect"};
+    if(Math.abs(g.th1) > maxTh1)   return {b:"reject", why:(g.th1>0?"flips to Th1":"nonspecific")};
+    if(g.rep < minRep)             return {b:"reject", why:"not reproducible"};
+    return {b: g.known?"known":"novel", why:""};
+  }
+  function chip(c){ return '<span class="dotm" style="background:'+c+'"></span>'; }
+  function render(){
+    var minSup=+S[0].value, maxTh1=+S[1].value, minKd=+S[2].value, minRep=+S[3].value;
+    V[0].textContent=minSup.toFixed(2); V[1].textContent=maxTh1.toFixed(2);
+    V[2].textContent=minKd.toFixed(2); V[3].textContent=minRep.toFixed(2);
+    var out={reject:[],known:[],novel:[]};
+    GENES.forEach(function(g){
+      if(g.th2>0) return; // TBX21 raises Th2, not a suppressor candidate — omit from filter
+      var r=classify(g,minSup,maxTh1,minKd,minRep); out[r.b].push({g:g,why:r.why});
+    });
+    ["reject","known","novel"].forEach(function(k){
+      cnt[k].textContent=out[k].length;
+      col[k].innerHTML = out[k].length? out[k].map(function(o){
+        var c = k==="novel"?"var(--find)":(k==="known"?"var(--th2)":"var(--reject)");
+        return '<div class="row-g">'+chip(c)+'<span class="sym">'+o.g.sym+'</span>'+
+          '<span class="mini">Th2↓'+(-o.g.th2).toFixed(2)+'</span>'+
+          (o.why?'<span class="why">'+o.why+'</span>':'<span class="why" style="color:'+c+'">✓ pass</span>')+
+          '</div>';
+      }).join('') : '<div class="mini" style="padding:6px;color:var(--ink-3)">—</div>';
+    });
+  }
+  S.forEach(function(s){ s.addEventListener("input", render); });
+  render();
+})();
+</script>

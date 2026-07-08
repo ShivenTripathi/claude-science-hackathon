@@ -1,0 +1,47 @@
+{
+  "hit": {
+    "gene": "AMBRA1", "condition": "Stim48hr",
+    "th2_z": -2.74, "th1_z": -0.63,
+    "hardened_pass": true, "donor_evidence": "robust", "stability_score": 0.56,
+    "atlas_class": "novel_selective", "coherence_vs_GATA3_z": 2.65,
+    "drug_class": "E3-ligase substrate receptor (CRL4-AMBRA1)"
+  },
+  "hypothesis": "AMBRA1 sustains the Th2 program indirectly through its PP2A-regulatory function; knocking it down reduces PP2A-dependent Th2 promotion, collapsing the GATA3/IL4-IL5-IL13 program without engaging the Th1/T-bet axis. A secondary route is AMBRA1's role as the CRL4 substrate receptor for D-type cyclins, coupling the effect to cell-cycle/proliferation control.",
+  "claims": [
+    {"id": 1, "statement": "AMBRA1 knockdown selectively suppresses the Th2 program (Th2 down, Th1 flat)",
+     "evidence": "th2_z=-2.74, th1_z=-0.63; passes knockdown-QC, off-target, power gates; donor-robust",
+     "source": "this study (arms_hardened + triage)", "confidence": 0.85, "tag": "observed"},
+    {"id": 2, "statement": "AMBRA1 knockdown reshapes the transcriptome like GATA3 knockdown",
+     "evidence": "co-perturbation coherence z=2.65 vs null (rare: 10/172)",
+     "source": "this study (coherence_scores)", "confidence": 0.65, "tag": "observed"},
+    {"id": 3, "statement": "AMBRA1 is the substrate receptor for a DDB1-CUL4 (CRL4) E3 ubiquitin ligase that degrades D-type cyclins",
+     "evidence": "well-established; multiple structural + functional papers",
+     "source": "Nature 2021 s41586-021-03474-7; s41586-021-03422-5", "confidence": 0.95, "tag": "known"},
+    {"id": 4, "statement": "AMBRA1 regulates CD4+ T-cell differentiation via PP2A (autophagy-independent)",
+     "evidence": "AMBRA1-ULK1-PP2A network in T-cell differentiation via TFEB",
+     "source": "Sci Rep 2024 s41598-024-82957-9", "confidence": 0.7, "tag": "known"},
+    {"id": 5, "statement": "PP2A promotes Th2 (and inhibits Th1) differentiation",
+     "evidence": "PP2A skews CD4 differentiation toward Th2/Th17/Treg/Th9",
+     "source": "PP2A CD4 literature (verify exact ref before quoting)", "confidence": 0.6, "tag": "known"},
+    {"id": 6, "statement": "Therefore AMBRA1->PP2A->Th2, so AMBRA1 loss reduces the Th2 program",
+     "evidence": "chain inferred from claims 4+5; not directly demonstrated in Th2 cells",
+     "source": null, "confidence": 0.4, "tag": "speculative"},
+    {"id": 7, "statement": "Alternative: AMBRA1 loss stabilizes cyclin D -> altered proliferation -> disrupted Th2 commitment (division-coupled)",
+     "evidence": "AMBRA1 loss stabilizes cyclin D and increases S-phase entry; Th2 commitment is division-coupled",
+     "source": "Nature 2021 (cyclin D); mechanistic inference", "confidence": 0.3, "tag": "speculative"}
+  ],
+  "counter_evidence": [
+    {"against_claim": 5, "statement": "PP2A's role in Th differentiation is context-dependent; some reports show PP2A loss worsens autoimmunity via Th17, not a clean Th2-only effect", "source": "falsification pass (literature)"},
+    {"against_claim": 6, "statement": "AMBRA1's dominant, best-evidenced role is cell-cycle (cyclin D degradation), not direct Th2 control; the Th2 link is indirect", "source": "falsification pass"},
+    {"open_question": "Is AMBRA1 itself effectively expressed/knocked-down and active in these 48h-stimulated cells? (on-target KD was significant, but arm effect must not be a cyclin-D/viability artifact)"}
+  ],
+  "competing_mechanisms": ["H_PP2A: AMBRA1->PP2A->Th2", "H_cellcycle: AMBRA1->cyclinD->proliferation->Th2"],
+  "discriminating_experiment": {
+    "cheapest": "Intracellular cyclin D + GATA3 co-stain (flow) after AMBRA1 knockdown in stimulated CD4+ T cells",
+    "logic": "If cyclin D rises while GATA3 falls -> cell-cycle axis (H_cellcycle). If GATA3 falls with cyclin D roughly unchanged -> PP2A axis (H_PP2A).",
+    "cost": "low (~1 week, existing antibodies)",
+    "confirmatory_followup": "AMBRA1-KD + PP2A-activator vs cyclin-D/CDK4-inhibitor rescue: which restores IL4/IL5/IL13"
+  },
+  "overall_confidence": 0.58,
+  "status": "preliminary — exhaustive co-perturbation neighbors + independent arm reproduction pending full-matrix download"
+}

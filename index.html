@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Claude Science Hackathon — Selective Th2 Suppressor Re-analysis</title>
+<style>
+  :root{
+    --ground:#f6f8f8;--surface:#ffffff;--surface-2:#fbfcfc;--ink:#141a1d;--muted:#5c676e;--faint:#8a959b;
+    --border:#e4e9ea;--accent:#0f9c82;--accent-soft:#e2f4f0;--skew:#c0392b;
+    --mono:ui-monospace,"SF Mono",Menlo,monospace;--sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  }
+  @media (prefers-color-scheme:dark){:root{
+    --ground:#0d1315;--surface:#141c1f;--surface-2:#111819;--ink:#e7eded;--muted:#93a0a6;--faint:#6b777d;
+    --border:#233033;--accent:#2ec9a6;--accent-soft:#122e2a;--skew:#e46150;}}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);line-height:1.55;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:820px;margin:0 auto;padding:56px 24px 80px}
+  .eyebrow{font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:600}
+  h1{font-size:33px;line-height:1.12;margin:.35em 0 .2em;letter-spacing:-.015em;text-wrap:balance}
+  .lede{color:var(--muted);font-size:16.5px;max-width:60ch;margin:0}
+  .note{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--skew);
+    border-radius:8px;padding:14px 18px;margin:26px 0;font-size:14.5px}
+  .note b{color:var(--skew)}
+  .grid{display:grid;grid-template-columns:1fr;gap:14px;margin:26px 0}
+  @media(min-width:620px){.grid{grid-template-columns:1fr 1fr}}
+  a.card{display:block;text-decoration:none;color:inherit;background:var(--surface);border:1px solid var(--border);
+    border-radius:12px;padding:20px 22px;transition:transform .12s,box-shadow .12s,border-color .12s}
+  a.card:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(0,0,0,.10);border-color:var(--accent)}
+  a.card.primary{background:var(--accent-soft);border-color:var(--accent)}
+  .card .k{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);font-weight:600}
+  .card h2{font-size:18px;margin:6px 0 5px;letter-spacing:-.01em}
+  .card p{margin:0;color:var(--muted);font-size:13.5px}
+  .card .go{color:var(--accent);font-weight:600;font-size:13.5px;margin-top:10px;display:inline-block}
+  h3{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin:34px 0 10px}
+  ul.inside{list-style:none;padding:0;margin:0;display:grid;gap:8px}
+  ul.inside li{font-size:14px;color:var(--muted)}
+  ul.inside code{font-family:var(--mono);font-size:12.5px;background:var(--surface-2);border:1px solid var(--border);border-radius:4px;padding:1px 6px;color:var(--ink)}
+  .foot{color:var(--faint);font-size:12.5px;margin-top:40px;border-top:1px solid var(--border);padding-top:18px}
+  .foot a{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">Built with Claude · Life Sciences · Researcher track</div>
+  <h1>Selective Th2 Suppressor Re-analysis</h1>
+  <p class="lede">A genome-scale CRISPRi Perturb-seq re-analysis in primary human CD4+ T cells — hunting knockdowns that suppress the Th2 (allergy) program without flipping cells toward Th1, then stress-testing that claim to destruction.</p>
+
+  <div class="note"><b>Honest bottom line.</b> Under rigorous statistics the naive selective-suppressor atlas <b>does not hold up</b>: competitive scoring collapses the arm-correlation confound (+0.54→+0.18), a permutation null shows no enrichment over random gene sets (FDR ≈ 1), and GATA3 reads as a Th1-skewer. This documents a <b>calibrated negative result</b> plus a reproducible pipeline and an agentic review layer — not a target list.</div>
+
+  <div class="grid">
+    <a class="card primary" href="th2-selective-suppressors/dashboard.html">
+      <div class="k">Interactive report</div>
+      <h2>📊 Dashboard</h2>
+      <p>The full self-contained story: the 2D arm plane, scored shortlist, mechanism dossiers, independent review, and the hardened re-analysis — all readable in-page.</p>
+      <span class="go">Open the dashboard →</span>
+    </a>
+    <a class="card" href="th2-selective-suppressors/review_index.html">
+      <div class="k">Raw artifacts</div>
+      <h2>🗂️ File index</h2>
+      <p>Click through every underlying file — figures, tables, parquet data, dossiers, and the analysis notebooks — with relative links.</p>
+      <span class="go">Browse the files →</span>
+    </a>
+  </div>
+
+  <h3>What's inside</h3>
+  <ul class="inside">
+    <li>📈 <code>dashboard.html</code> — interactive, self-contained report (every figure & document embedded)</li>
+    <li>📝 <code>outputs/synthesis.md</code> — plain-language synthesis (with the hardened-result reversal up top)</li>
+    <li>🔍 <code>outputs/review_report.md</code> — independent review: data/QC audit, 6-agent literature + methods audit, hardened re-analysis</li>
+    <li>🧬 <code>outputs/mechanism_dossiers/</code> — per-candidate agentic dossiers (investigate → adversarial verify)</li>
+    <li>⚙️ <code>notebooks/01–10</code> — the reproducible pipeline (streams a 16.8 GB matrix without downloading it)</li>
+  </ul>
+
+  <div class="foot">
+    Data: Zhu &amp; Dann et al. 2025, genome-scale CRISPRi Perturb-seq in primary human CD4+ T cells (Marson lab); signature: Ota et al. 2021. See the repository README for full provenance and citations.<br>
+    <a href="https://github.com/ShivenTripathi/claude-science-hackathon">View source on GitHub →</a>
+  </div>
+</div>
+</body>
+</html>

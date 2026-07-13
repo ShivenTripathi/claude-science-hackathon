@@ -44,9 +44,9 @@
 <div class="wrap">
   <div class="eyebrow">Built with Claude · Life Sciences · Researcher track</div>
   <h1>Selective Th2 Suppressor Re-analysis</h1>
-  <p class="lede">A genome-scale CRISPRi Perturb-seq re-analysis in primary human CD4+ T cells — hunting knockdowns that suppress the Th2 (allergy) program without flipping cells toward Th1, then stress-testing that claim to destruction.</p>
+  <p class="lede">A genome-scale CRISPRi Perturb-seq re-analysis in primary human CD4+ T cells — hunting knockdowns that suppress the Th2 (allergy) program without flipping cells toward Th1, stress-testing that claim to destruction, then asking whether a different, degrader-relevant phenotype is the more useful question.</p>
 
-  <div class="note"><b>Honest bottom line.</b> Under rigorous statistics the naive selective-suppressor atlas <b>does not hold up</b>: competitive scoring collapses the arm-correlation confound (+0.54→+0.18), a permutation null shows no enrichment over random gene sets (FDR ≈ 1), and GATA3 reads as a Th1-skewer. This documents a <b>calibrated negative result</b> plus a reproducible pipeline and an agentic review layer — not a target list.</div>
+  <div class="note"><b>Honest bottom line.</b> On the core claim — <i>selective</i> Th2 suppression — the answer is a <b>calibrated negative</b>, reached independently by <b>three tracks</b>: competitive scoring collapses the arm-correlation confound (+0.54→+0.18), a permutation null shows no enrichment over random gene sets (FDR ≈ 1), and GATA3 reads as a Th1-skewer under the matched Th1-vs-Th0 arm. A fourth track asks a <i>different</i> question — not "selective," but "phenocopies the STAT6/GATA3 collapse," the bar an oral STAT6 <b>degrader</b> actually clears. That reframe calibrates as a classifier (anchors self-recover, permutation p &lt; 0.001) and, fused with Open Targets tractability + AD genetics + AD patient skin, <i>nominates</i> druggable off-axis nodes (ITK, INPP5D/SHIP1) — a nomination map, not a validated target list, and it does not rescue the selectivity negative. See <a href="RECONCILIATION.md">RECONCILIATION.md</a>.</div>
 
   <div class="grid">
     <a class="card primary" href="th2-selective-suppressors/dashboard.html">
@@ -67,6 +67,18 @@
       <p>A from-scratch replication — streaming pipeline, its own QC catch, independent verification — that reaches the same negative result, plus a biology primer and the full reasoning as an interactive page.</p>
       <span class="go">Open the primer →</span>
     </a>
+    <a class="card primary" href="th2-druggable-network/deck.html">
+      <div class="k">Next-degrader strand · slide deck</div>
+      <h2>💊 Druggable type-2 network</h2>
+      <p>A degrader-relevant reframe: score every perturbation for STAT6/GATA3 collapse phenocopy (a positive anchor that calibrates where the selectivity residual gave FDR ≈ 1), then weight by chemical tractability, AD genetics, and AD patient skin. Nominates off-axis nodes — ITK &amp; INPP5D/SHIP1 — conditioned on the same negative.</p>
+      <span class="go">Open the deck →</span>
+    </a>
+    <a class="card" href="https://github.com/ShivenTripathi/claude-science-hackathon/tree/main/th2-druggable-network">
+      <div class="k">Next-degrader strand · methods</div>
+      <h2>📁 Druggable-network project</h2>
+      <p>The reusable collapse scorer, the 63-node ranked map, the patient-anchoring layer, and a report — three-notebook reproducible pipeline.</p>
+      <span class="go">Read the project on GitHub →</span>
+    </a>
   </div>
 
   <h3>What's inside</h3>
@@ -76,6 +88,15 @@
     <li>🔍 <code>outputs/review_report.md</code> — independent review: data/QC audit, 6-agent literature + methods audit, hardened re-analysis</li>
     <li>🧬 <code>outputs/mechanism_dossiers/</code> — per-candidate agentic dossiers (investigate → adversarial verify)</li>
     <li>⚙️ <code>notebooks/01–10</code> — the reproducible pipeline (streams a 16.8 GB matrix without downloading it)</li>
+  </ul>
+
+  <h3>Next-degrader strand — the druggable type-2 network</h3>
+  <ul class="inside">
+    <li>💊 <code>th2-druggable-network/deck.html</code> — self-contained deck: a druggable intracellular type-2 network beyond STAT6</li>
+    <li>⚙️ <code>th2-druggable-network/notebooks/01–03</code> — byte-range streaming → STAT6/GATA3 collapse scorer → composite network assembly</li>
+    <li>🧬 <code>outputs/th2_collapse_scorer.py</code> — reusable, documented scorer; anchors self-recover (GATA3 #1, permutation p &lt; 0.001, known-reg 87th pctile)</li>
+    <li>🎯 off-axis leads — <code>ITK</code>, <code>INPP5D/SHIP1</code> (existing chemical matter + AD genetics), <code>KDM8</code>, <code>UBA5</code>, <code>DOHH</code> (enzyme handles up in AD skin)</li>
+    <li>📄 <code>outputs/druggable_type2_network.csv</code> — ranked map (tractability + GWAS + patient); <code>outputs/AD_patient_validation.csv</code> — GSE147424 anchoring; <code>outputs/next_degrader_report.md</code></li>
   </ul>
 
   <div class="foot">

@@ -43,7 +43,36 @@ functional selectivity test — they do not, and cannot, rescue the negative.
 |---|---|---|
 | **`th2-selective-suppressors/`** | Full pipeline: arm reconstruction → credibility tiering → magnitude-controlled composite → agentic dossiers → 6-agent audit → **hardened re-analysis** | Calibrated negative; 7 genes pass the strict multi-arm gate, none credible at FDR≥1 |
 | **`th2-independent-replication/`** | From-scratch second pipeline; streaming, GATA3 alignment guardrail, matched Th1-vs-Th0 verification, permutation null | **Independently reaches the same negative** — agreement between two pipelines is the point |
-| **`th2-ad-translation/`** (new) | Therapeutic translation *conditioned on the negative*: AD patient-skin validation (GSE147424), Open Targets + HPA druggability, off-axis (Dupixent) classification, integrated dossier | No candidate rescued; contributes the disease-relevance + druggability filters a target would additionally have to pass |
+| **`th2-ad-translation/`** | Therapeutic translation *conditioned on the negative*: AD patient-skin validation (GSE147424), Open Targets + HPA druggability, off-axis (Dupixent) classification, integrated dossier | No candidate rescued; contributes the disease-relevance + druggability filters a target would additionally have to pass |
+| **`th2-druggable-network/`** (new) | **Reframes the phenotype**, not the candidate list: scores every perturbation for STAT6/GATA3 *collapse phenocopy* (a positive anchor), then fuses tractability + AD-GWAS + AD-skin into a druggable off-axis map | Does **not** rescue the selectivity negative; contributes a *calibrated classifier* (the collapse anchor recovers where the residual did not) and a degrader-oriented nomination map |
+
+## Two different questions: "selective" (negative) vs "collapse phenocopy" (the degrader bar)
+
+The fourth track (`th2-druggable-network/`) is easy to mistake for an attempt to overturn the
+negative. It is not. It changes the **phenotype definition**, and the distinction matters:
+
+- The three re-analysis/translation tracks score **selectivity** — Th2 down *while Th1 stays flat*.
+  That is a conjunction, it is the allergy-relevant ideal, and it is what does **not** survive
+  (Th1/Th2 are reciprocal; FDR ≈ 1; GATA3 is a skewer).
+- The druggable-network track scores **collapse phenocopy** — how closely a knockdown reproduces the
+  *whole* STAT6/GATA3 trans-footprint, selective or not. This is deliberately **not** the selectivity
+  bar. It is the bar an oral **STAT6 degrader** actually clears: STAT6 degradation collapses the
+  type-2 axis wholesale and was never "selective" in the Th1-flat sense, yet it works in AD. So for a
+  *degrader* program, "phenocopies the master-regulator collapse" is arguably the more useful
+  screen-derived signal than "selective."
+
+Why this reframe **calibrates where the residual failed:** a "Th2-down & Th1-flat" residual is a
+small difference between two noisy arms, dominated by low-power perturbations (72% of the naive
+selective set had <10 DE genes). The collapse anchor is instead a *positive* signal with a large,
+measurable footprint, so scoring correlation to it recovers GATA3/STAT6 as #1/#2, recovers held-out
+IL4R out-of-sample, clears a permutation null at p < 0.001, and concentrates known type-2 regulators
+at the 87th percentile (vs recall@250 = 0 for the naive atlas). **Honest limit:** because it scores
+the whole footprint, the collapse score is activation-coupled — it correlates only weakly with
+cytokine-*specific* suppression (Spearman −0.14 to −0.19), so it nominates the type-2/activation
+module broadly, not a clean IL-4/5/13-selective effect. Its output (ITK, INPP5D/SHIP1 off-axis;
+KDM8/UBA5/DOHH enzyme handles) is a **nomination map for a degrader campaign**, not a validated —
+or selective — target list, and it inherits the same un-polarized-cell and functional-assay caveats
+as every other track.
 
 ## Where the analyses converge (cross-pipeline agreement)
 

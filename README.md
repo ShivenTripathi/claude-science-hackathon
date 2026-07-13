@@ -3,11 +3,13 @@
 Work from the **Built with Claude: Life Sciences** hackathon (Researcher track).
 
 > **Start with [`RECONCILIATION.md`](./RECONCILIATION.md)** — the single reconciled view across all
-> three tracks: what agrees, the one sharp correction (GATA3), the cross-pipeline convergence, and
-> what actually survives. Short version: the core scientific claim is a **calibrated negative** —
-> single-gene selective Th2 suppression is not established by this screen — and the durable
-> deliverables are the reproducible pipeline, the agentic review infrastructure, and the AD
-> translational-filter layer.
+> four tracks: what agrees, the one sharp correction (GATA3), the cross-pipeline convergence, and
+> what actually survives. Short version: the core scientific claim — single-gene *selective* Th2
+> suppression — is a **calibrated negative**, reached independently by three tracks; a fourth track
+> reframes the phenotype to STAT6/GATA3 *collapse phenocopy* (the bar an oral STAT6 degrader clears),
+> which calibrates as a classifier and nominates a druggable off-axis map without rescuing the
+> selectivity negative. The durable deliverables are the reproducible streaming pipeline, the agentic
+> review infrastructure, the AD translational-filter layer, and the reusable collapse scorer.
 
 ## Projects
 
@@ -49,6 +51,20 @@ The therapeutic-translation layer, following a pharma researcher's brief: **AD p
 candidates. Conditioned on the calibrated negative — these are the filters a target would additionally
 have to pass *if* it ever cleared a functional selectivity test; the druggability and off-axis
 annotations hold independently of the negative.
+
+### [`th2-druggable-network/`](./th2-druggable-network) — Druggable type-2 network beyond STAT6
+
+A degrader-oriented **reframe** of the phenotype. Instead of the selectivity residual that gives
+FDR ≈ 1, it scores every perturbation for how well it **phenocopies the STAT6/GATA3 collapse** (a
+positive anchor — the bar an oral STAT6 degrader clears, since degradation collapses the whole type-2
+axis and was never "Th1-flat" selective). That anchor calibrates as a classifier: GATA3/STAT6
+self-recover #1/#2, held-out IL4R recovers out-of-sample, permutation p < 0.001, known regulators at
+the 87th percentile. Fusing Open Targets tractability + GWAS Catalog + AD patient scRNA-seq
+(GSE147424) onto the ranking **nominates** druggable off-axis nodes — ITK and INPP5D/SHIP1 (existing
+chemical matter + AD/allergy GWAS), plus KDM8/UBA5/DOHH enzyme handles up in AD lesional skin.
+Ships a reusable, documented `th2_collapse_scorer.py` and a self-contained `deck.html`. **This does
+not rescue the selectivity negative** — it is a nomination map conditioned on the same caveats, and
+the collapse score is activation-coupled (see the track README and `RECONCILIATION.md`).
 
 ## Data provenance & citation
 

@@ -65,6 +65,19 @@ functional selectivity test — they do not, and cannot, rescue the negative.
    HIF-1α, HIF-2α, and AHR), no source shows ARNT KD selectively lowering Th2, and the AHR arm
    predicts the opposite direction. Both the repo's ARNT dossier and the translation track land on the
    same downgraded "uncertain."
+5. **Two-compartment patient validation splits the leads — RBCK1 is the only novel-mechanism
+   candidate concordant in both.** The translation track validated candidates in AD lesional *skin*
+   (GSE147424) and, as the screen-matched secondary, AD peripheral-*blood* CD4 (GSE189188, 6 AD / 5
+   HC, patient-level pseudobulk). GATA3/STAT6 controls replicate in both. Of the three novel-mechanism
+   leads, only **RBCK1** replicates in blood (pseudobulk log₂FC +0.52, padj 1.6×10⁻⁴) — up in *both*
+   compartments; **ARNT and BRPF1 are skin-restricted** (blood pseudobulk ns, slightly negative).
+   Cross-compartment concordance narrows the least-artifactual novel lead to RBCK1. Note the two
+   pipelines nominate *different* single genes: the hardened re-analysis's clean-statistics survivor
+   is **BRPF1** (RBCK1 is not in its 7-gene set), whereas the two-compartment patient validation
+   favors **RBCK1** (BRPF1 is skin-restricted). No novel gene is endorsed by *both* the clean
+   statistics *and* both patient compartments — and RBCK1, the patient-concordant lead, *still does
+   not clear the permutation FDR*. This is where a functional follow-up would start, not a validated
+   target.
 
 ## The one sharp correction between the session and the repo
 

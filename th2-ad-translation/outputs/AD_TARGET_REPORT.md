@@ -9,6 +9,16 @@
 > observation that these genes are **present/upregulated in AD patient skin** — the additional filters
 > a target would have to pass *if* it ever cleared a functional selectivity test. Treat this as the
 > translational-filter layer, not a target list.
+>
+> **Two-compartment patient update (added after this report was drafted).** The candidates were
+> subsequently tested in the screen-matched compartment — AD circulating blood CD4⁺ T cells
+> (GSE189188, patient-level pseudobulk). Of the three novel-mechanism "leads" below, **only RBCK1
+> replicates in blood** (up in both AD skin and AD blood); **ARNT and BRPF1 are skin-restricted**.
+> The dossier CSV carries `ad_blood_CD4_log2fc` / `ad_blood_replicates` / `cross_compartment_up`
+> columns. So even within the conditioned-on-the-negative framing, RBCK1 is the one novel candidate
+> with cross-compartment patient support — while the clean-statistics survivor from the hardened
+> re-analysis is a *different* gene (BRPF1). No novel gene is endorsed by both the rigorous statistics
+> and both patient compartments. See [`../../RECONCILIATION.md`](../../RECONCILIATION.md).
 
 # Off-axis, patient-validated drug targets for atopic dermatitis
 

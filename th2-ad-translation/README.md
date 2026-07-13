@@ -15,12 +15,17 @@ patient tissue, and druggable?
 
 ## What this track adds (three filters neither re-analysis applied)
 
-1. **AD patient validation** — real AD lesional-skin scRNA-seq (**GSE147424**, He et al. 2020;
-   45,332 cells), T-cell compartment annotated by canonical markers. 15/16 candidates significantly
-   upregulated in AD lesional-skin T cells (FDR<0.05); GATA3/STAT6 positive controls behave; signal is
-   T-cell-specific. **Necessary but not sufficient** — NDFIP2 has the strongest patient upregulation
-   yet is a likely artifact; expression ≠ causal selectivity. (Peripheral-blood CD4 secondary
-   validation — the screen-matched compartment — is the natural next dataset.)
+1. **AD patient validation, two compartments.**
+   - *Primary — lesional skin* (**GSE147424**, He et al. 2020; 45,332 cells): 15/16 candidates
+     significantly upregulated in AD lesional-skin T cells (FDR<0.05); GATA3/STAT6 controls behave;
+     signal is T-cell-specific. **Necessary but not sufficient** — NDFIP2 has the strongest patient
+     upregulation yet is a likely artifact; expression ≠ causal selectivity.
+   - *Secondary — circulating blood CD4, the screen-matched compartment* (**GSE189188**, 6 AD / 5 HC
+     PBMC scRNA-seq, 15,446 CD4⁺ T cells; patient-level pseudobulk as the honest primary test). Only
+     **4 genes replicate**: GATA3, STAT6 (controls), **RBCK1** (pb log₂FC +0.52, padj 1.6×10⁻⁴), and
+     P4HB. Crucially, of the novel-mechanism leads **only RBCK1 is concordant across both skin and
+     blood** — **ARNT and BRPF1 are skin-restricted** (blood ns). The two-compartment split is itself
+     a useful triage: cross-compartment concordance is a higher bar than either alone.
 2. **Druggability** — Open Targets tractability + Human Protein Atlas subcellular location per
    candidate. All 16 are intracellular → small-molecule; 0 antibody-tractable; 7 hard-to-drug; 2
    already drugged (P4HB, SRD5A3).
@@ -35,8 +40,10 @@ patient tissue, and druggable?
   rank.
 - `druggability_matrix.csv` — Open Targets tractability + HPA location + known drugs + AD association.
 - `off_axis_ranking.csv` — mechanism-axis classification vs the Dupixent axis.
-- `patient_ad_expression.csv` + `patient_validation.png` — GSE147424 lesional-vs-healthy T-cell
+- `patient_ad_expression.csv` + `patient_validation.png` — GSE147424 lesional-skin vs-healthy T-cell
   expression per candidate.
+- `patient_ad_blood_expression.csv` + `patient_validation_blood.png` — GSE189188 AD-blood-vs-HC CD4
+  expression (single-cell + patient-level pseudobulk); the screen-matched secondary validation.
 - `mechanism_dossiers/*.md` — 8 per-candidate agentic dossiers (investigate → adversarial verify),
   each flagging its own likely-false-positive concerns.
 - `METHODS_NOTE.md` — the pipeline methods note for the selective-suppressor stage that fed this.

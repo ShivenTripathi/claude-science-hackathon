@@ -63,7 +63,9 @@ attribution:
 - Ota M. et al. (2021) Th2-vs-Th1 reference signature.
 - He H. et al. (2020) *Single-cell transcriptome analysis of human skin identifies novel fibroblast
   subpopulation and enrichment of immune subsets in atopic dermatitis.* J Allergy Clin Immunol; data
-  GEO **GSE147424** (used in `th2-ad-translation/` for AD patient validation).
+  GEO **GSE147424** (used in `th2-ad-translation/` for AD lesional-skin validation).
+- AD peripheral-blood PBMC scRNA-seq, GEO **GSE189188** (used in `th2-ad-translation/` for the
+  screen-matched blood-CD4 secondary validation).
 - Human Protein Atlas (proteinatlas.org) and Open Targets Platform — target druggability annotation
   (`th2-ad-translation/`).
 

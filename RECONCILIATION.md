@@ -53,10 +53,13 @@ functional selectivity test — they do not, and cannot, rescue the negative.
 2. **GATA3 is a skewer, not selective.** Both the hardened re-analysis and the independent
    replication show GATA3 KD induces Th1 under the matched Th1-vs-Th0 arm. Calibration (GATA3 recovers
    as the strongest Th2-*lowering* gene) is real, but "lowers Th2" ≠ "selective."
-3. **The same handful of least-artifactual genes surface everywhere.** The hardened 7-gene survivor
-   set (BRPF1, DALRD3, GLIS2, RABEPK, RELL2, SLC30A5, UQCR11) and the translation track's independent
-   top-lead set both surface **BRPF1** and **RELL2**. Convergence on the same genes across scoring
-   schemes is the most positive signal — and *even these do not clear the permutation FDR.*
+3. **The same least-artifactual gene surfaces across pipelines.** The hardened 7-gene survivor set
+   (BRPF1, DALRD3, GLIS2, RABEPK, RELL2, SLC30A5, UQCR11) and the translation track's top-lead set
+   both surface **BRPF1** — the one gene common to the rigorous survivor list and the 16-candidate
+   translation set. (Separately, **RELL2** appears both in the hardened survivors and in this
+   session's broader residual-leaders ranking over all 33,983 rows — a weaker, different overlap, not
+   part of the 16-gene translation candidate set.) Convergence on BRPF1 across independent scoring
+   schemes is the most positive signal — and *even it does not clear the permutation FDR.*
 4. **ARNT is the most mechanistically legible lead in every track, and "uncertain" in every track.**
    The HIF-2α→GATA3 circuit is real (Immunity 2024), but ARNT is a pleiotropic hub (obligate for
    HIF-1α, HIF-2α, and AHR), no source shows ARNT KD selectively lowering Th2, and the AHR arm

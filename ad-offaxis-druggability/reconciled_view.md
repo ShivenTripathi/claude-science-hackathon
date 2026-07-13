@@ -30,7 +30,8 @@ The honest headline is stated up front, because it is the most important result:
 Started from the same premise as the project's original atlas: the paper's single bidirectional
 Th2−Th1 axis cannot separate a **selective Th2 suppressor** (KD lowers Th2, leaves Th1 flat — the
 allergy target) from a **Th1-skewer** (KD just flips the cell toward Th1). A 2-arm decomposition
-(Th2-up arm and Th1-up arm of the Ota 2021 signature) can. The initial read looked promising —
+(Th2-up arm and Th1-up arm of the reference Th2/Th1 signature the sibling analyses used) can. The
+initial read looked promising —
 GATA3 top, ~127 selective hits.
 
 **Then it ran the statistics honestly, and the conclusion inverted:**

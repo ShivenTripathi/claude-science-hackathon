@@ -38,19 +38,31 @@ and a **6-agent literature + methods self-audit** that caught the over-claim bef
 **Interactive dashboard (self-contained):**
 https://claude.ai/code/artifact/65051cc2-afc8-44ec-b5f8-b72349fafb54
 
-### [`th2-independent-replication/`](./th2-independent-replication) — Independent from-scratch replication
+### [`th2-independent-replication/`](./th2-independent-replication) — Independent replication
 
-A second, independently-built pipeline for the same question. Different tooling, different code — same
-honest bottom line: under a clean matched Th1-vs-Th0 arm, GATA3 (the apparent top hit) is a
-**Th1-skewer**, not a selective suppressor. Agreement between two independent pipelines is the point.
+A **from-scratch second pipeline** for the same question, different tooling. It **streams** the 16.8 GB
+public-S3 DE matrix over HTTP byte-ranges (never downloads it), and a **GATA3 alignment guardrail**
+caught a silent arm↔annotation row-order scramble. It independently reaches the **same calibrated
+negative** — under a matched Th1-vs-Th0 arm, GATA3 is a Th1-skewer, not a selective suppressor.
+Agreement between two independent pipelines is the point.
 
 ### [`th2-ad-translation/`](./th2-ad-translation) — Atopic-dermatitis target translation
 
 The therapeutic-translation layer, following a pharma researcher's brief: **AD patient-skin validation**
-(GSE147424), **Open Targets + HPA druggability**, and **off-axis (non-Dupixent) classification** of the
-candidates. Conditioned on the calibrated negative — these are the filters a target would additionally
-have to pass *if* it ever cleared a functional selectivity test; the druggability and off-axis
-annotations hold independently of the negative.
+(GSE147424), a **screen-matched blood-CD4 secondary validation** (GSE189188), **Open Targets + HPA
+druggability**, and **off-axis (non-Dupixent) classification** of the candidates. Conditioned on the
+calibrated negative — these are the filters a target would additionally have to pass *if* it ever
+cleared a functional selectivity test.
+
+### [`ad-offaxis-druggability/`](./ad-offaxis-druggability) — AD off-axis druggability layer + three-way reconciliation
+
+An independent, complementary take on the same translation brief, and the **capstone reconciliation**.
+It classifies the full 626-candidate universe by STRING proximity to the IL-4Rα–STAT6 (dupilumab)
+axis, validates in a **280k-cell CELLxGENE AD skin atlas**, grades **Open Targets** druggability, then
+**reconciles all three analyses** — and reports honestly that this orthogonal layer *cannot* rescue a
+statistically-failed candidate: the candidate lists are almost disjoint, and of 102
+statistically-hardened survivors only GATA3 (the discredited Th1-skewer) has AD genetic support.
+→ **[`ad-offaxis-druggability/reconciled_view.md`](./ad-offaxis-druggability/reconciled_view.md)**
 
 ### [`th2-druggable-network/`](./th2-druggable-network) — Druggable type-2 network beyond STAT6
 
@@ -82,8 +94,11 @@ attribution:
   GEO **GSE147424** (used in `th2-ad-translation/` for AD lesional-skin validation).
 - AD peripheral-blood PBMC scRNA-seq, GEO **GSE189188** (used in `th2-ad-translation/` for the
   screen-matched blood-CD4 secondary validation).
-- Human Protein Atlas (proteinatlas.org) and Open Targets Platform — target druggability annotation
-  (`th2-ad-translation/`).
+- CELLxGENE **Atopic Dermatitis Atlas** (Nat Commun 2026; DOI 10.1038/s41467-026-69587-7; dataset
+  `b0ef440b-e303-4ad2-ada8-ce13336280ba`) — 280,518 skin cells; used for patient single-cell
+  validation in `ad-offaxis-druggability/`.
+- Human Protein Atlas (proteinatlas.org), Open Targets Platform, and STRING v12 — target druggability,
+  genetic-association, and pathway annotations (`th2-ad-translation/`, `ad-offaxis-druggability/`).
 
 The large DE matrix (`GWCD4i.DE_stats.h5ad`, 16.8 GB) is **not** vendored — the code streams it
 directly from the public S3 bucket.

@@ -1,0 +1,8 @@
+set,n,definition,note
+My selective universe,626,naive mean-of-z selective atlas (prior),basis of my AD/druggability layer
+My AD patient-validated leads,72,off-axis + patient-up + tractable + selective,
+My convergent-3,3,"NR4A3, MAP3K14, PTPA",
+Proj-A hardened-7,7,competitive scoring + permutation FDR + multi-arm,FDR≈1: not enriched vs random
+Proj-A agentic real-leads,2,"ARNT, ELAVL1 (survived adversarial mech review)",investigator: plausible; final post-adversarial: uncertain (the 2 non-artifact leads worth follow-up)
+Proj-B hardened-pass,95,"independent pipeline, QC+donor+matched-arm",
+Proj-B novel-selective,7,novel_selective class after hardening,

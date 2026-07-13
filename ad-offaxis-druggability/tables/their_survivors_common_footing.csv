@@ -1,0 +1,103 @@
+gene,symbol,tractability,tract_sm,tract_ab,best_modality,sm_label,ab_label,ad_genetic,ad_overall,n_safety,provenance,Tcell_log2FC_les_vs_healthy,Tcell_frac_expr_Lesional,ad_upreg_call_Tcell,AllCells_log2FC_les_vs_healthy,ad_upreg_call_AllCells,patient_validated,stability_score,th2_z,th1_z,atlas_class
+ATP2C1,ATP2C1,0.7,0.7,0.55,small_molecule,Structure with Ligand,UniProt SigP or TMHMM,0.0,0.0,0,B-hardened,0.655,0.0479,up,0.694,up,True,0.375,-2.0672964826483087,-0.9752167552199634,not_in_atlas
+C2CD5,C2CD5,0.7,0.0,0.7,antibody,,UniProt loc high conf,0.0,0.0,0,B-hardened,0.5789,0.0233,up,0.7317,up,True,0.5,-2.1637590037126397,-0.4269757249679752,concordant
+P2RY8,P2RY8,0.7,0.5,0.7,antibody,Druggable Family,UniProt loc high conf,0.0,0.0,0,B-hardened,0.6468,0.0317,up,1.2281,not_detected,True,0.5,-2.065546362728181,-0.3668731765652593,not_in_atlas
+USP34,USP34,0.7,0.7,0.0,small_molecule,Structure with Ligand,,0.0,0.0,0,B-hardened,0.367,0.1431,flat,0.5092,up,True,0.375,-2.03043875936889,-0.8256497313950245,not_in_atlas
+CBX5,CBX5,0.0,0.0,0.0,none,,,0.0,0.0,0,B-hardened,0.6398,0.0982,up,0.4245,flat,True,0.375,-2.4320053446491308,0.8759570631690875,concordant
+ADRM1,ADRM1,1.0,1.0,0.65,small_molecule,Approved Drug,GO CC high conf,0.0,0.0,0,B-hardened,,,,,,False,0.5,-2.4937385060239876,-0.0300356296155338,concordant
+DPP4,DPP4,1.0,1.0,0.9,small_molecule,Approved Drug,Advanced Clinical,0.0,0.029,0,B-hardened,,,,,,False,0.5,-2.1199289793334515,0.0166775004198663,not_in_atlas
+SRD5A3,SRD5A3,1.0,1.0,0.55,small_molecule,Approved Drug,UniProt SigP or TMHMM,0.0,0.0,0,A-agentic-novel;B-hardened,,,,,,False,0.375,-2.0478963244373505,0.9824935454919675,moderate
+IKBKB,IKBKB,0.9,0.9,0.0,small_molecule,Advanced Clinical,,0.0,0.01,1,B-hardened,,,,,,False,0.5,-2.116545498469835,-0.1150340427932876,concordant
+P4HB,P4HB,0.9,0.9,0.7,small_molecule,Advanced Clinical,UniProt loc high conf,0.0,0.0,0,B-hardened,,,,,,False,0.5,-2.3130270700750013,0.3870068808924587,moderate
+STAT5A,STAT5A,0.7,0.7,0.0,small_molecule,Structure with Ligand,,0.272,0.181,0,A-agentic-novel;B-hardened,,,,,,False,0.375,-2.4504633637405893,-0.5836648560494041,concordant
+ARHGAP21,ARHGAP21,0.7,0.7,0.65,small_molecule,Structure with Ligand,GO CC high conf,0.0,0.0,0,B-hardened,,,,,,False,0.5,-2.0781492065910165,0.0401738886065275,not_in_atlas
+ARL1,ARL1,0.7,0.7,0.7,small_molecule,Structure with Ligand,UniProt loc high conf,0.0,0.0,0,A-agentic-novel;B-hardened,,,,,,False,0.75,-2.9874402308467896,0.2670157045137959,concordant
+ARNT,ARNT,0.7,0.7,0.0,small_molecule,Structure with Ligand,,0.0,0.002,1,A-real-lead;A-agentic-novel;B-hardened,,,,,,False,1.0,-3.2414184659662277,0.313464271103314,moderate
+BRPF1,BRPF1,0.7,0.7,0.65,small_molecule,Structure with Ligand,GO CC high conf,0.0,0.0,0,A-hardened7;B-hardened,,,,,,False,0.375,-2.2564683079520584,0.6309586259462197,moderate
+CHI3L2,CHI3L2,0.7,0.0,0.7,antibody,,UniProt loc high conf,0.0,0.0,0,B-hardened,,,,,,False,0.5,-2.2056136151872257,-0.1568126803934865,not_in_atlas
+CNDP2,CNDP2,0.7,0.7,0.0,small_molecule,Structure with Ligand,,0.0,0.0,0,B-hardened,,,,,,False,0.5,-2.407988077957953,0.0979516216470904,not_in_atlas
+CTSD,CTSD,0.7,0.7,0.65,small_molecule,Structure with Ligand,GO CC high conf,0.0,0.004,1,B-hardened,,,,,,False,0.375,-2.201895832802358,-0.931084405683619,not_in_atlas
+DGKD,DGKD,0.7,0.0,0.7,antibody,,UniProt loc high conf,0.0,0.004,0,B-hardened,,,,,,False,0.375,-2.1534658529189152,-0.8236243990493273,not_in_atlas
+DIAPH3,DIAPH3,0.7,0.7,0.5,small_molecule,Structure with Ligand,Human Protein Atlas loc,0.0,0.002,0,B-hardened,,,,,,False,0.375,-2.162067744913805,-0.6648955709556088,not_in_atlas
+FKBP3,FKBP3,0.7,0.7,0.0,small_molecule,Structure with Ligand,,0.0,0.0,0,B-hardened,,,,,,False,0.5,-2.1251001575527817,-0.397367640148434,not_in_atlas
+FRMD6,FRMD6,0.7,0.0,0.7,antibody,,UniProt loc high conf,0.0,0.0,0,B-hardened,,,,,,False,0.375,-2.0434269502486977,-0.7999234929648406,not_in_atlas
+HAT1,HAT1,0.7,0.7,0.0,small_molecule,Structure with Ligand,,0.0,0.0,0,B-hardened,,,,,,False,0.375,-2.3925551228255375,-0.870465541197033,not_in_atlas
+IL32,IL32,0.7,0.0,0.7,antibody,,UniProt loc high conf,0.0,0.031,0,B-hardened,,,,,,False,0.5,-2.041946399815426,-0.3984128479751816,not_in_atlas
+KDM4C,KDM4C,0.7,0.7,0.0,small_molecule,Structure with Ligand,,0.0,0.0,0,B-hardened,,,,,,False,0.375,-2.2090363615478714,-0.9731594160531112,not_in_atlas
+MSH2,MSH2,0.7,0.7,0.0,small_molecule,Structure with Ligand,,0.0,0.0,0,B-hardened,,,,,,False,0.375,-2.0969026850761496,-0.6543997800926257,not_in_atlas
+NDFIP2,NDFIP2,0.7,0.0,0.7,antibody,,UniProt loc high conf,0.0,0.0,0,B-hardened,,,,,,False,0.375,-2.480340827290894,-0.5220270846860201,moderate
+PPT1,PPT1,0.7,0.5,0.7,antibody,Med-Quality Pocket,UniProt loc high conf,0.0,0.0,0,B-hardened,,,,,,False,0.5625,-2.745535959281356,-0.7791482326979959,not_in_atlas
+PSAP,PSAP,0.7,0.7,0.65,small_molecule,Structure with Ligand,GO CC high conf,0.0,0.003,0,B-hardened,,,,,,False,0.375,-2.4194923548828178,-0.7719262473961946,not_in_atlas
+RAB21,RAB21,0.7,0.7,0.0,small_molecule,Structure with Ligand,,0.0,0.0,0,A-agentic-novel;B-hardened,,,,,,False,0.75,-3.033130935889304,-0.9645032670625344,concordant
+RABEPK,RABEPK,0.7,0.0,0.7,antibody,,UniProt loc high conf,0.0,0.0,0,A-hardened7;B-hardened,,,,,,False,0.5625,-2.910096310938574,-0.8558630927976019,not_in_atlas
+RELL2,RELL2,0.7,0.0,0.7,antibody,,UniProt loc high conf,0.0,0.0,0,A-hardened7,,,,,,False,0.5625,-2.9756864040725173,0.7067903090098316,concordant
+SEC23A,SEC23A,0.7,0.7,0.7,small_molecule,Structure with Ligand,UniProt loc high conf,0.0,0.0,0,B-hardened,,,,,,False,0.5,-2.3616151877288205,-0.4962156542828096,moderate
+SEC24A,SEC24A,0.7,0.7,0.7,small_molecule,Structure with Ligand,UniProt loc high conf,0.0,0.0,0,B-hardened,,,,,,False,0.5625,-2.6977311136313,-0.8696687610246154,moderate
+SLC30A5,SLC30A5,0.7,0.0,0.7,antibody,,UniProt loc high conf,0.0,0.0,0,A-hardened7,,,,,,False,,,,
+SLC35G1,SLC35G1,0.7,0.0,0.7,antibody,,UniProt loc high conf,0.0,0.0,0,B-hardened,,,,,,False,0.375,-2.009348127520867,-0.8955226113755311,not_in_atlas
+SORL1,SORL1,0.7,0.0,0.7,antibody,,UniProt loc high conf,0.0,0.0,0,B-hardened,,,,,,False,0.375,-2.08222727431192,-0.5705297290437529,moderate
+STK38,STK38,0.7,0.7,0.0,small_molecule,Structure with Ligand,,0.0,0.0,0,B-hardened,,,,,,False,0.375,-2.3505631960220112,-0.9638143897821356,not_in_atlas
+TAF13,TAF13,0.7,0.7,0.0,small_molecule,Structure with Ligand,,0.0,0.0,0,B-hardened;B-novel-selective,,,,,,False,0.375,-2.4471027829878715,-0.7674011545073188,novel_selective
+TM7SF3,TM7SF3,0.7,0.0,0.7,antibody,,UniProt loc high conf,0.0,0.0,0,B-hardened,,,,,,False,0.375,-2.2265612810923683,-0.5631244081377268,not_in_atlas
+UBA6,UBA6,0.7,0.7,0.0,small_molecule,Structure with Ligand,,0.0,0.0,0,B-hardened,,,,,,False,0.75,-2.7185340875268453,0.323488312286518,not_in_atlas
+UQCR11,UQCR11,0.7,0.7,0.55,small_molecule,Structure with Ligand,UniProt SigP or TMHMM,0.0,0.0,0,A-hardened7,,,,,,False,,,,
+CD96,CD96,0.65,0.0,0.65,antibody,,GO CC high conf,0.0,0.018,0,B-hardened,,,,,,False,0.375,-2.005476808605243,-0.5299485102798366,not_in_atlas
+ELAVL1,ELAVL1,0.65,0.65,0.0,small_molecule,High-Quality Ligand,,0.0,0.002,0,A-real-lead;A-agentic-novel,,,,,,False,,,,
+FNBP1,FNBP1,0.65,0.0,0.65,antibody,,GO CC high conf,0.0,0.0,0,B-hardened,,,,,,False,0.375,-2.1262405864210403,-0.6447024704538267,not_in_atlas
+NIPA1,NIPA1,0.65,0.0,0.65,antibody,,GO CC high conf,0.0,0.0,0,B-hardened,,,,,,False,0.375,-2.057915499221872,-0.6457377003150211,not_in_atlas
+PLEKHA2,PLEKHA2,0.65,0.0,0.65,antibody,,GO CC high conf,0.0,0.0,0,B-hardened,,,,,,False,0.5,-2.427587151896545,-0.1750338485752205,not_in_atlas
+SLC33A1,SLC33A1,0.65,0.0,0.65,antibody,,GO CC high conf,0.0,0.0,0,B-hardened,,,,,,False,0.5,-2.1866698877485673,-0.210311221872762,moderate
+TGOLN2,TGOLN2,0.65,0.0,0.65,antibody,,GO CC high conf,0.0,0.0,0,B-hardened,,,,,,False,0.5,-2.125254846540074,-0.464734920142631,not_in_atlas
+UFC1,UFC1,0.6,0.6,0.0,small_molecule,High-Quality Pocket,,0.0,0.0,0,A-agentic-novel;B-hardened,,,,,,False,0.375,-2.0870828342911136,-0.6626452104578746,concordant
+DNAJB9,DNAJB9,0.55,0.0,0.55,antibody,,UniProt SigP or TMHMM,0.0,0.004,0,B-novel-selective,,,,,,False,0.75,-2.9601077858621694,-0.145612684492866,novel_selective
+ERLIN1,ERLIN1,0.55,0.0,0.55,antibody,,UniProt SigP or TMHMM,0.0,0.0,0,B-hardened,,,,,,False,0.5,-2.034850638803778,-0.1470167533803541,not_in_atlas
+HERPUD1,HERPUD1,0.55,0.0,0.55,antibody,,UniProt SigP or TMHMM,0.0,0.0,0,B-hardened,,,,,,False,0.375,-2.0028446243374516,-0.83398269459678,not_in_atlas
+MIA2,MIA2,0.55,0.0,0.55,antibody,,UniProt SigP or TMHMM,0.0,0.0,0,A-agentic-novel;B-hardened,,,,,,False,0.375,-2.2708400794838743,-0.5627756322899645,moderate
+MYO9A,MYO9A,0.55,0.0,0.55,antibody,,UniProt SigP or TMHMM,0.0,0.0,0,B-hardened,,,,,,False,0.375,-2.308224734317819,-0.7993434816614547,moderate
+NAALADL1,NAALADL1,0.55,0.0,0.55,antibody,,UniProt SigP or TMHMM,0.0,0.0,0,B-hardened,,,,,,False,0.375,-2.211592923418752,-0.9215421114312572,concordant
+PDIA5,PDIA5,0.55,0.0,0.55,antibody,,UniProt SigP or TMHMM,0.0,0.0,0,B-hardened,,,,,,False,0.5,-2.4010337034645635,0.120008035956168,not_in_atlas
+SACM1L,SACM1L,0.55,0.0,0.55,antibody,,UniProt SigP or TMHMM,0.0,0.0,1,B-hardened,,,,,,False,0.375,-2.0936984109987664,-0.923801478253174,moderate
+SMIM7,SMIM7,0.55,0.0,0.55,antibody,,UniProt SigP or TMHMM,0.0,0.0,0,B-hardened,,,,,,False,0.5625,-2.9681391568405746,-0.606473470120058,moderate
+SSR1,SSR1,0.55,0.0,0.55,antibody,,UniProt SigP or TMHMM,0.0,0.037,0,A-agentic-novel;B-hardened,,,,,,False,0.375,-2.1332692412109693,-0.971025955220144,moderate
+TMEM200A,TMEM200A,0.55,0.0,0.55,antibody,,UniProt SigP or TMHMM,0.0,0.0,0,B-hardened,,,,,,False,0.5,-2.3224075121658143,-0.4402856946182662,not_in_atlas
+TMEM263,TMEM263,0.55,0.0,0.55,antibody,,UniProt SigP or TMHMM,0.0,0.0,0,B-hardened,,,,,,False,0.5625,-2.7578955213127996,0.6118682338490576,moderate
+KCTD12,KCTD12,0.5,0.0,0.5,antibody,,GO CC med conf,0.0,0.0,0,B-hardened,,,,,,False,0.5,-2.0050601259327103,-0.4577747046700638,not_in_atlas
+GATA3,GATA3,0.0,0.0,0.0,none,,,0.551,0.342,1,B-hardened,,,,,,False,1.0,-3.345888327021668,0.0309051828351156,concordant
+ARL6IP4,ARL6IP4,0.0,0.0,0.0,none,,,0.043,0.026,0,B-hardened,,,,,,False,0.5,-2.2325644802400015,-0.2402089507861836,not_in_atlas
+ACOT7,ACOT7,0.0,0.0,0.0,none,,,0.0,0.0,0,B-hardened,,,,,,False,0.375,-2.01210125868748,-0.9611257728703484,moderate
+AGPS,AGPS,0.0,0.0,0.0,none,,,0.0,0.002,0,B-hardened,,,,,,False,0.375,-2.27933978490129,0.5799910724426882,not_in_atlas
+AMBRA1,AMBRA1,0.0,0.0,0.0,none,,,0.0,0.0,0,A-agentic-novel;B-hardened;B-novel-selective,,,,,,False,0.5625,-2.743716736746609,-0.6325205214871394,novel_selective
+ANKRD11,ANKRD11,0.0,0.0,0.0,none,,,0.0,0.0,0,B-hardened,,,,,,False,0.375,-2.04876263848323,-0.8904879671957043,moderate
+ARMC1,ARMC1,0.0,0.0,0.0,none,,,0.0,0.0,0,B-hardened,,,,,,False,0.375,-2.035848643461397,-0.6010435042538913,not_in_atlas
+BCL7A,BCL7A,0.0,0.0,0.0,none,,,0.0,0.0,0,B-hardened,,,,,,False,0.375,-2.297651313227924,-0.7922854179062758,not_in_atlas
+C21orf91,C21orf91,0.0,0.0,0.0,none,,,0.0,0.0,0,B-hardened,,,,,,False,0.375,-2.3245040831011763,-0.9022340111696447,not_in_atlas
+CEP131,CEP131,0.0,0.0,0.0,none,,,0.0,0.0,0,B-hardened,,,,,,False,0.375,-2.0150621486214244,-0.8033617679304809,not_in_atlas
+DALRD3,DALRD3,0.0,0.0,0.0,none,,,0.0,0.0,0,A-hardened7,,,,,,False,,,,
+DAZAP2,DAZAP2,0.0,0.0,0.0,none,,,0.0,0.0,0,B-hardened,,,,,,False,0.5,-2.006702738140797,-0.4058865858237239,not_in_atlas
+DCAF7,DCAF7,0.0,0.0,0.0,none,,,0.0,0.0,0,B-hardened;B-novel-selective,,,,,,False,0.375,-2.2247755393451167,-0.6842277865558618,novel_selective
+E2F3,E2F3,0.0,0.0,0.0,none,,,0.0,0.004,0,B-hardened;B-novel-selective,,,,,,False,0.375,-2.06593556434658,-0.7393032352406984,novel_selective
+GLIS2,GLIS2,0.0,0.0,0.0,none,,,0.0,0.0,0,A-hardened7,,,,,,False,0.5,-2.0588984102178345,-0.4007449726060516,not_in_atlas
+GPATCH8,GPATCH8,0.0,0.0,0.0,none,,,0.0,0.0,0,A-agentic-novel;B-hardened;B-novel-selective,,,,,,False,0.5,-2.045359716675241,-0.4298422491348565,novel_selective
+HNRNPAB,HNRNPAB,0.0,0.0,0.0,none,,,0.0,0.0,0,B-hardened,,,,,,False,0.375,-2.4819915223785953,-0.799760438907525,not_in_atlas
+HSF2,HSF2,0.0,0.0,0.0,none,,,0.0,0.0,0,B-hardened,,,,,,False,0.5,-2.0988891605413413,-0.2973882092252695,moderate
+IFI16,IFI16,0.0,0.0,0.0,none,,,0.0,0.011,0,B-hardened,,,,,,False,0.375,-2.0432616951236966,-0.6962021384002341,not_in_atlas
+IRF2BP2,IRF2BP2,0.0,0.0,0.0,none,,,0.0,0.001,0,B-hardened,,,,,,False,0.375,-2.0293056077659437,-0.5277179561991998,concordant
+NUDT8,NUDT8,0.0,0.0,0.0,none,,,0.0,0.0,0,B-hardened,,,,,,False,0.5,-2.117458553007068,-0.4549968228571329,not_in_atlas
+OAS2,OAS2,0.0,0.0,0.0,none,,,0.0,0.006,0,B-hardened,,,,,,False,0.375,-2.410907573724926,-0.69470576477211,not_in_atlas
+POU2AF1,POU2AF1,0.0,0.0,0.0,none,,,0.0,0.004,0,B-hardened,,,,,,False,0.5,-2.3032811612062605,-0.165593745836146,not_in_atlas
+PRRC2C,PRRC2C,0.0,0.0,0.0,none,,,0.0,0.0,0,B-hardened,,,,,,False,0.5,-2.00948919747882,-0.3829406419048399,concordant
+RABGAP1,RABGAP1,0.0,0.0,0.0,none,,,0.0,0.0,0,B-hardened,,,,,,False,0.5,-2.428748749047172,-0.4852432666518796,not_in_atlas
+RBCK1,RBCK1,0.0,0.0,0.0,none,,,0.0,0.024,0,B-hardened,,,,,,False,0.375,-2.079682373974454,0.5406175450361583,moderate
+SAP130,SAP130,0.0,0.0,0.0,none,,,0.0,0.0,0,B-hardened;B-novel-selective,,,,,,False,0.5625,-2.6966136740856856,-0.7973217638152815,novel_selective
+SCAF1,SCAF1,0.0,0.0,0.0,none,,,0.0,0.0,0,B-hardened,,,,,,False,0.75,-2.6466650851943228,-0.4457825502956669,not_in_atlas
+SETX,SETX,0.0,0.0,0.0,none,,,0.0,0.0,0,B-hardened,,,,,,False,0.375,-2.092407491107515,-0.8488741869307196,not_in_atlas
+SHPRH,SHPRH,0.0,0.0,0.0,none,,,0.0,0.0,0,B-hardened,,,,,,False,0.375,-2.1978088774364988,-0.9737171571220502,not_in_atlas
+SPEN,SPEN,0.0,0.0,0.0,none,,,0.0,0.0,0,B-hardened,,,,,,False,0.375,-2.0841409613947013,0.9733686248442772,concordant
+TECPR1,TECPR1,0.0,0.0,0.0,none,,,0.0,0.0,0,B-hardened,,,,,,False,0.5,-2.0271795938345054,0.1559558519446207,not_in_atlas
+TFAP4,TFAP4,0.0,0.0,0.0,none,,,0.0,0.0,0,B-hardened,,,,,,False,0.75,-2.6677636030210694,0.4287534990303889,concordant
+THAP7,THAP7,0.0,0.0,0.0,none,,,0.0,0.0,0,B-hardened,,,,,,False,0.5,-2.166198507470887,-0.3030053828841665,moderate
+TRIM56,TRIM56,0.0,0.0,0.0,none,,,0.0,0.0,0,B-hardened,,,,,,False,0.5,-2.1149904036738003,-0.285967219817114,not_in_atlas
+USP33,USP33,0.0,0.0,0.0,none,,,0.0,0.0,0,B-hardened,,,,,,False,0.5,-2.1041293221261173,0.4306639958921496,not_in_atlas
+YAF2,YAF2,0.0,0.0,0.0,none,,,0.0,0.0,0,B-hardened,,,,,,False,0.375,-2.053888246706387,-0.7805577280665065,not_in_atlas
+ZFYVE1,ZFYVE1,0.0,0.0,0.0,none,,,0.0,0.0,0,B-hardened,,,,,,False,0.5625,-2.883215772922211,-0.9543282070674162,not_in_atlas
+ZSWIM6,ZSWIM6,0.0,0.0,0.0,none,,,0.0,0.0,0,B-hardened,,,,,,False,0.375,-2.1449294346305847,-0.8807376757715487,not_in_atlas

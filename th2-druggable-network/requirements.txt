@@ -1,0 +1,10 @@
+# th2-druggable-network — reproducible pipeline deps
+numpy>=1.24
+pandas>=2.0
+scipy>=1.10
+h5py>=3.8
+fsspec>=2023.6
+requests>=2.28
+matplotlib>=3.7
+pyarrow>=12.0
+# notebooks 01/02 stream the 16.8 GB DE matrix by HTTP byte-range; no full download needed.

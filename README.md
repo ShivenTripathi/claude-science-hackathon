@@ -2,6 +2,9 @@
 
 Work from the **Built with Claude: Life Sciences** hackathon (Researcher track).
 
+🎬 **2-minute demo video:** https://youtu.be/yL9Hp9oprlQ &nbsp;·&nbsp; local copy: [`media/demo.mp4`](./media/demo.mp4)
+&nbsp;·&nbsp; 🌐 **Live site:** https://shiventripathi.github.io/claude-science-hackathon/
+
 > **Start with [`RECONCILIATION.md`](./RECONCILIATION.md)** — the single reconciled view across all
 > four tracks: what agrees, the one sharp correction (GATA3), the cross-pipeline convergence, and
 > what actually survives. Short version: the core scientific claim — single-gene *selective* Th2
